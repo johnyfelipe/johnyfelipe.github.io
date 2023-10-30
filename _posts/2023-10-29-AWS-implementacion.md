@@ -1,14 +1,15 @@
 ---
-title: "Implementación de un E-commerce de alta disponiblidad con Linode"
+title: "Implementación de un E-commerce de alta disponiblidad con AWS"
 categories:
   - Cloud Computing
 tags:
   - Nube pública
-  - Linode
+  - EC2
   - SSH
-  - Node Balancer
+  - Load Balancer
   - Firewall
-  - VLan
+  - Security groups
+  - VPC
 ---
 
 Un e-commerce de alta disponibilidad es una tienda online que está diseñada para estar disponible el 99,99% del tiempo. Esto significa que los clientes pueden acceder a la tienda y realizar compras sin problemas, incluso durante períodos de alto tráfico o cuando se producen fallos en el sistema.
