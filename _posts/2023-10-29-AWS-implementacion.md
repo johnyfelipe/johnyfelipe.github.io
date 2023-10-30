@@ -1,5 +1,5 @@
 ---
-title: "Implementación de un E-commerce de alta disponiblidad con AWS"
+title: "Implementación de un E-commerce de alta disponiblidad con Amazon AWS"
 categories:
   - Cloud Computing
 tags:
