@@ -718,11 +718,11 @@ sudo systemctl restart nginx.service
 sudo systemctl restart php7.4-fpm.service
 ~~~
 
-## Configurar base de datos
+# Servidor de Base de datos
 
-Se va a configurar al Linode bd1 como servidor de base de datos
+Se va a configurar a la instancia creada apartir de la imagen, cual fue llamada `bd1` como servidor de base de datos
 
-### Configuraciones adicionales
+## Configuraciones adicionales a la instancia
 
 Ingresamos a la instancia creada a partir de la imagen, para configurar la base de datos
 ~~~ bash
@@ -751,52 +751,49 @@ Reiniciamos el linode de bd1
 sudo reboot
 ~~~
 
-### Instalando MariaDB
+## MariaDB
 
 Iniciamos el proceso actualizando la instancia.
 ~~~ bash
 sudo apt update -y && sudo apt upgrade -y
 ~~~
 
- Una vez completada esta actualización, procedemos a instalar los componentes necesarios para configurar el servidor de base de datos.
+ Una vez completada la actualización, procedemos a instalar los programas necesarios para configurar el servidor de base de datos.
 ~~~ bash
-sudo apt install -y software-properties-common dirmngr 
+sudo apt install -y software-properties-common mariadb-server mariadb-client mariadb-backup ufw  pacemaker pcs rsync dirmngr 
 ~~~
 
-~~~ bash
-sudo apt install -y software-properties-common mariadb-server mariadb-client mariadb-backup ufw  pacemaker pcs rsync
-~~~
+### Configuración de MariaDB
 
-### Configurando MariaDB
-
-Para aumentar la seguridad de MySQL, puedes ejecutar la siguiente línea de comando:
+Para aumentar la seguridad de MySQL, se debe ejecutar la siguiente línea de comando:
 ~~~ bash
 sudo mysql_secure_installation
 ~~~
 
-Iniciaremos un proceso de preguntas en el que cambiaremos la contraseña root, entre otros aspectos que se muestran en la figura adjunta. Por lo general, las respuestas a todas las preguntas son afirmativas (yes).
+El cual iniciara un asistente que le guiará a través de un proceso de preguntas en el que cambiaremos la contraseña root, entre otros aspectos que se muestran en la figura adjunta. Por lo general, las respuestas a todas las preguntas son afirmativas (yes).
 
-![Seguridad MySQL](/assets/Imagenes/seguridad-mysql.png)
+![Seguridad MySQL](/assets/Nube-Publica/Linode/MariaDB/seguridad-mysql.png)
 
-Finalizamos reiniciando mysql con la siguiente linea.
-
+Reiniciamos MariaDB con la siguiente linea.
 ~~~ bash
 sudo systemctl restart mariadb
 ~~~
 
 ### Crear base de datos y usuario para PrestaShop - Opcional
 
-Se sugiere la creación de usuarios propios para la base de datos que no cuenten con privilegios completos a MySQL como lo es root. Para iniciar MySQL, utilice la siguiente línea:
+Se recomeinda la creación de usuarios que contengan permisos solo para la base de datos de PrestaShop. Para ello iniciamos MariaDB.
 
 ~~~ bash
 sudo mysql -u root -p
 ~~~
 
-Estamos configurando la base de datos y puedes elegir el nombre que desees para la base de datos de PrestaShop.
-> - Base de datos: presta_bd
-> - Usuario: presta_usu
-> - Contraseña: ultrasecretaPassword
-> - sufijo: ca_
+La información para este proyecto son los siguientes:
+- Base de datos: `presta_bd`
+- Usuario: `presta_usu`
+- Contraseña: `ultrasecretaPassword`
+- sufijo: `ca_`
+
+> Esta información puede ser modificada según las especificaciones que se requieran, en sufijo se debe mantener el formato de minusculas y primero una consonante.
 
 ~~~ sql
 create database presta_bd DEFAULT CHARACTER SET utf8mb4 COLLATE  utf8mb4_unicode_ci;
@@ -808,18 +805,18 @@ SELECT User, Host, plugin FROM mysql.user;
 quit
 ~~~
 
-![BaseDatos Usuario](/assets/Imagenes/crear-bd-usuario.png)
+![BaseDatos Usuario](/assets/Nube-Publica/Linode/MariaDB/crear-bd-usuario.png)
 
 ### Configuración de acceso - Opcional
 
-Para permitir el acceso remoto a la base de datos, es posible realizar las modificaciones necesarias en el archivo `/etc/mysql/mariadb.conf.d/50-server.cnf`, aunque se aconseja que en su lugar, se modifique el siguiente archivo:
+> La siguiente configuración se la puede realizar en caso de no crear un balanceador de carga HaProxy para la base de datos, y crear PrestaShop con un servidor web y una base de datos.
 
+Para permitir el acceso remoto a la base de datos, es tienen que realizar modificaciones al archivo `/etc/mysql/mariadb.conf.d/50-server.cnf`, aunque se aconseja que en su lugar, se cree o modifique un nuevo archivo para poder mantener la integridad de la información en caso de exista alguna actualización que obligue a modificar el archivo base:
 ~~~ bash
 sudo nano /etc/mysql/mariadb.conf.d/60-galera.cnf
 ~~~
 
-Se modificará la siguiente linea `# bind-address 127.0.0.1` o `# bind-address 0.0.0.0` 
-
+Se modificará la siguiente linea `# bind-address 127.0.0.1` o `# bind-address 0.0.0.0` por:
 ~~~ vim
 bind-address 0.0.0.0
 ~~~
@@ -827,41 +824,44 @@ bind-address 0.0.0.0
 Guardamos y salimos con `Ctrl + o`, `Enter` y `ctrl + x`
 
 Reiniciamos mysql para que tome efecto la configuración
-
 ~~~ bash
 sudo systemctl restart mariadb
 ~~~
 
-Una vez que hayas completado la creación de la base de datos y configurado la instancia, puedes continuar con la instalación de PrestaShop.
+Una vez que se haya completado la creación de la base de datos y la configuración, se puede continuar con la instalación de PrestaShop.
 
 Sin embargo en este proyecto se proyectará para un entorno de producción, donde se recomienda crear réplicas de la base de datos para garantizar la disponibilidad en caso de fallo en la base de datos.
 
-### Crear replicas de la base de datos con Galera
+> Nota: crear estas configuraciones no repercute con las configuraciones que se van a realizar.
+
+![Configuración galera](/assets/Nube-Publica/Linode/MariaDB/mariadb-conf-d-60-galera.png)
+
+# Crear replicas de la base de datos con Galera
 
 Para establecer réplicas de una base de datos, siendo una de ellas la principal y las otras dos réplicas secundarias, comenzaremos el proceso clonando la instancia del servidor de base de datos.
 - En la instancia que deseamos clonar, accedemos al menú desplegable ubicado en el extremo derecho y seleccionamos la opción 'Clonar'.
 - Como recomendación adicional, se sugiere apagar la instancia antes de iniciar el proceso de clonación para prevenir posibles fallos.
 
-![Menu desplegable](/assets/Imagenes/menu_instancia_desplegable.png)
+![Menu desplegable](/assets/Nube-Publica/Linode/Clones/menu_instancia_desplegable.png)
 
 Se presenta a continuación la imagen que contiene los datos empleados en la creación del clon de la instancia.
 
-![Clonacion](/assets/Imagenes/clonacion-1.png)
+![Menu desplegable](/assets/Nube-Publica/Linode/Clones/clonacion-1.png)
 
 Al finalizar obtendremos la siguiente estructura de instancias
 
-![Clonacion](/assets/Imagenes/clonacion-2.png)
+![Menu desplegable](/assets/Nube-Publica/Linode/Clones/clonacion-2.png)
 
 Ahora procedemos a configurar cada instancia, iniciaremos configurando la instancia que servirá como principal
 
-#### Galera - bd1
+## Galera - bd1
 
-Iniciamos sesión a la instancia de base de datos.
+Iniciamos sesión en la instancia de base de datos principal.
 ~~~ bash
 ssh -p 9146 usuario@IP-bd1
 ~~~
 
-A continuación se creará el siguiente archivo que contendrá la información necesaria para que funcione galera.
+Creamos el siguiente archivo el cual contendrá la información necesaria para que funcione galera.
 ~~~ bash
 sudo nano /etc/mysql/mariadb.conf.d/galera.cnf
 ~~~
@@ -901,7 +901,7 @@ wsrep_node_name="galera_bd1"
 
 Guardamos `ctrl + o`, `Enter` y salimos `ctrl + x`
 
-#### Galera - bd2
+## Galera - bd2
 
 ~~~ bash
 ssh -p 9146 usuario@IP-bd2
@@ -961,7 +961,7 @@ wsrep_node_address="IP-bd2"
 wsrep_node_name="galera_bd2"
 ~~~
 
-#### Galera - bd3
+## Galera - bd3
 
 Iniciamos sesión en la instancia
 ~~~ bash
@@ -1020,18 +1020,16 @@ wsrep_node_address="IP-bd3"
 wsrep_node_name="galera_bd3"
 ~~~
 
-![Configuración galera](/assets/Imagenes/Config-galera.png)
+![Configuración galera](/assets/Nube-Publica/Linode/Galera/Config-galera.png)
 
-#### Configuración final de galera
+## Configuración final de galera
 
-En todas las instancias de servidores de bases de datos `db1, db2, db3`, paramos completamente el servicio de mariadb
+> En todas las instancias de servidores de bases de datos `db1, db2, db3`, paramos completamente el servicio de mariadb
 ~~~ bash
 sudo systemctl stop mariadb
 ~~~
 
-En la instancia principal en este caso sera bd1
-
-Creamos como base de datos principal 
+En la instancia computacional `bd1`, la vamos a crear como base de datos principal 
 ~~~ bash
 sudo galera_new_cluster
 ~~~
@@ -1051,14 +1049,13 @@ Comprobamos el estado en cada base de datos, el valor de `wsrep_cluster_size` ca
 mysql -u root -p -e "SHOW STATUS LIKE 'wsrep_cluster_size'"
 ~~~
 
-En la siguiente imagen se visualiza el estado de todos los nodos o replicas estan funcionando por medio de la siguiente linea.
+En la siguiente imagen se visualiza el estado de todos los nodos o replicas que estan funcionando.
 
-Estado de la configuración
-![Estado galera](/assets/Imagenes/Estado-galera.png)
+![Configuración galera](/assets/Nube-Publica/Linode/Galera/Estado-galera.png)
 
-## Configuración de Haproxy
+# Configuración de Haproxy
 
-Iniciamos el linode creado con la etiqueta haproxy
+Iniciamos la instancia creada con la etiqueta haproxy
 ~~~ bash
 ssh -p 9146 usuario@IP-haproxy
 ~~~
@@ -1095,7 +1092,7 @@ Agregamos la siguientes lineas
 
 Guardamos `ctrl + o` `Enter` y salimos `ctrl + x`
 
-Reiniciamos haproxy
+Reiniciamos la instancia haproxy
 ~~~
 sudo reboot
 ~~~
@@ -1128,7 +1125,8 @@ balance leastconn
 ~~~
 
 Imagen del archivo de configuración
-![Haproxy archivo de configuración](/assets/Imagenes/haproxy-config.png)
+
+![Haproxy archivo de configuración](/assets/Nube-Publica/Linode/HaProxy/haproxy-config.png)
 
 Reiniciamos haproxy
 
@@ -1141,20 +1139,20 @@ Verificamos que todo este correcto con la siguiente linea
 ss -tunelp | grep 3306
 ~~~
 
-![Haproxy archivo de configuración](/assets/Imagenes/haproxy-prueba.png)
+![Haproxy archivo de configuración](/assets/Nube-Publica/Linode/HaProxy/haproxy-prueba.png)
 
-### Finalizando la instalación de PrestaShop
+# Finalizando la instalación de PrestaShop
 
 Para concluir la instalación de PrestaShop, abrimos el navegador web, en este caso, utilizamos Firefox. En la barra de direcciones, debemos ingresar la IP o el dominio del balanceador de carga, la cual variará según la dirección o el dominio que hayamos configurado previamente en el archivo de configuración de NginX. 
 
 > http://ejemplo.com/install
 
-Para proceder, siga los siguientes pasos en cada sección:
+Se abrirá un asistente que nos guiará a lo largo de la instalación.
 
 - En la pantalla de información sobre la tienda, en la opción 'Enable SSL', seleccione 'SI'.
 - La cuenta de usuario a crear es la que permitirá acceder al panel de administración de PrestaShop. 
 
-![Datos en general](/assets/Imagenes/prestashop-datos.png)
+![Datos en general](/assets/Nube-Publica/Linode/Prestashop/prestashop-datos.png)
 
 En la sección de la base de datos, ingresamos la información correspondiente de acuerdo a los datos previamente introducidos.
 
@@ -1167,11 +1165,12 @@ En la sección de la base de datos, ingresamos la información correspondiente d
 
 probar la conexión y continuar
 
-![Prestashop prueba](/assets/Imagenes/prestashop-prueba-conectividad.png)
+![Datos en general](/assets/Nube-Publica/Linode/Prestashop/prestashop-prueba-conectividad.png)
+
 
 Al concluir la instalación, se mostrará la siguiente pantalla en la que se le solicitará que renombre o elimine la carpeta de instalación, así como que cambie el nombre de la carpeta de administración de PrestaShop.
 
-![Fin de instalación](/assets/Imagenes/Prestashop-fin.png)
+![Datos en general](/assets/Nube-Publica/Linode/Prestashop/Prestashop-fin.png)
 
 Para ello ingresamos a la instancia del servidor web 
 
@@ -1191,104 +1190,143 @@ O si queremos eliminar la carpeta
 sudo rm -f /var/www/ecommerce/install
 ~~~
 
-![Eliminar o Renombrar carpeta](/assets/Imagenes/Eliminar-renombrar.png)
+![Datos en general](/assets/Nube-Publica/Linode/Prestashop/Eliminar-renombrar.png)
 
 Después de completar el paso previo, ahora podemos acceder al front-end de PrestaShop. La dirección que debes utilizar es la dirección IP o dominio del balanceador de carga.
 
-> http://Dominio
+> http://Dominio.com/index.php
 
+![Datos en general](/assets/Nube-Publica/Linode/Prestashop/Prestashop-front-end.png)
 
-![Front-End Prestashop](/assets/Imagenes/Prestashop-front-end.png)
+Para acceder al panel de administración de PrestaShop, es necesario el nombre modificado de la carpeta de administración de PrestaShop que fue editada en los pasos anteriores
 
-Para acceder al panel de administración de PrestaShop, es necesario dirigirse al backend. En este caso, '8io9' corresponde al nombre modificado de la carpeta de administración de PrestaShop
-
-> http://Dominio/
+> http://Dominio.com/nhsdf78sdf
 
 La siguiente imagen muestra la pantalla para iniciar sesión 
 
-![Control usuario](/assets/Imagenes/Prestashop-Back-end-usuario.png)
+![Datos en general](/assets/Nube-Publica/Linode/Prestashop/Prestashop-Back-end-usuario.png)
 
 
 Para finalizar en esta imagen tenemos el Back-End de PrestaShop
 
-![Back-End Prestashop](/assets/Imagenes/Prestashop-backend.png)
+![Datos en general](/assets/Nube-Publica/Linode/Prestashop/Prestashop-backend.png)
 
-## Configurando el Firewall
+# Firewall
 
-Esta configuración debe ser simetrica con la configuración del cloud firewall de Linode 
+Linode recomienda tener firewall interno por cada instancia computacional creada por ello
+la configuración debe ser igual entre el firewall interno como con el cloud firewall de Linode 
 
-### db1
+## db1
 
-> - Habilitar UFW.
-> ~~~ bash
-> sudo ufw enable
-> ~~~
-
-> - - Puertos necesarios para Mariadb.
-> ~~~bash
->    sudo ufw allow from IP-haproxy to any port 3306,4567,4568,4444 proto tcp
->    sudo ufw allow from IP-haproxy to any port 3306,4567,4568,4444 proto udp
->    sudo ufw allow from IP-Usuario to any port 9146 proto tcp
->~~~
-
-### db2
-
-> - Habilitar UFW.
-> ~~~ bash
-> sudo ufw enable
-> ~~~
-
-> - Puertos necesarios para Mariadb.
-> ~~~bash
->    sudo ufw allow from IP-db1 to any port 3306,4567,4568,4444 proto tcp
->    sudo ufw allow from IP-db1 to any port 3306,4567,4568,4444 proto udp
->~~~
-
-### db3
-
-> - Habilitar UFW.
-> ~~~ bash
-> sudo ufw enable
-> ~~~
-
-> - Puertos necesarios para Mariadb.
-> ~~~ bash
->    sudo ufw allow from IP-db1 to any port 3306,4567,4568,4444 proto tcp
->    sudo ufw allow from IP-db1 to any port 3306,4567,4568,4444 proto udp
-> ~~~
-
-### Haproxy
-
-> - Habilitar UFW.
-> ~~~ bash
-> sudo ufw enable
-> ~~~
-
-> - Puertos necesarios para Mariadb.
-> ~~~ bash
->    sudo ufw allow from IP-web1 to any port 3306,80,443,9146 proto tcp
-> ~~~
-
-### Web1
-
-> - Habilitar UFW.
-> ~~~ bash
-> sudo ufw enable
-> ~~~
-
-> - Puertos necesarios para Mariadb.
-> ~~~ bash
->    sudo ufw allow from IP-web1 to any port 3306,80,443,9146 proto tcp
-> ~~~
-
-## Acceso a SSH solo por llaves y sin contraseña
-
-Abrimos con el editor de texto la configuración de SSH
+- Habilitar UFW.
 ~~~ bash
-sudo nano /etc/ssh/sshd_config
+sudo ufw enable
 ~~~
 
-En todas los Linodes modificamos la siguiente linea
+- Puertos necesarios para Mariadb, y se habilita el puerto SSH, los demas puertos estaran inoperativos.
+~~~bash
+sudo ufw allow from IP-haproxy to any port 3306,4567,4568,4444 proto tcp
+sudo ufw allow from IP-haproxy to any port 3306,4567,4568,4444 proto udp
+sudo ufw allow from IP-Usuario to any port 9146 proto tcp
+>~~~
+
+## db2
+
+- Habilitar UFW.
 ~~~ bash
-PasswordAuthentication no
+sudo ufw enable
 ~~~
+
+- Puertos necesarios para Mariadb.
+~~~bash
+sudo ufw allow from IP-db1 to any port 3306,4567,4568,4444 proto tcp
+sudo ufw allow from IP-db1 to any port 3306,4567,4568,4444 proto udp
+sudo ufw allow from IP-Usuario to any port 9146 proto tcp
+~~~
+
+## db3
+
+- Habilitar UFW.
+~~~ bash
+sudo ufw enable
+~~~
+
+- Puertos necesarios para Mariadb.
+~~~ bash
+sudo ufw allow from IP-db1 to any port 3306,4567,4568,4444 proto tcp
+sudo ufw allow from IP-db1 to any port 3306,4567,4568,4444 proto udp
+sudo ufw allow from IP-Usuario to any port 9146 proto tcp
+~~~
+
+## Haproxy
+
+- Habilitar UFW.
+~~~ bash
+sudo ufw enable
+~~~
+
+- Puertos necesarios para Mariadb.
+~~~ bash
+sudo ufw allow from IP-db1 to any port 3306,4567,4568,4444 proto tcp
+sudo ufw allow from IP-db1 to any port 3306,4567,4568,4444 proto udp
+sudo ufw allow from IP-Usuario to any port 9146 proto tcp
+~~~
+
+## Web1
+
+- Habilitar UFW.
+~~~ bash
+sudo ufw enable
+~~~
+
+- Puertos necesarios para Mariadb.
+~~~ bash
+sudo ufw allow from IP-web1 to any port 3306,80,443,9146 proto tcp
+~~~
+
+# Firewall en la nube
+
+En la consola de administración de Linode nos dirigimos al menú lateral izquierdo y seleccionamos `Firewall`, creamos el firewall, seleccionamos las instancias según sea el caso y al finalizar creamos la reglas.
+
+## Instancias públicas
+
+Las instancias seran db1, db2, db3 y Haproxy
+
+![Firewall Cloud](/assets/Nube-Publica/Linode/Firewall/Configuracion-firewall-publico-asignacion-linodes.png)
+
+Para las reglas de entrada
+
+En la lista desplegable seleccionamos `Drop` e ingresamos las diferentes reglas que permitan los siguientes puertos: HTTP, HTTPS, SSH, MySQL.
+
+Puertos TCP: 3306, 80, 443, 9146
+
+En reglas de salida se mantiene por defecto
+
+![Firewall Cloud](/assets/Nube-Publica/Linode/Firewall/Configuracion-firewall-publico.png)
+
+## Instancias privadas
+
+![Firewall Cloud](/assets/Nube-Publica/Linode/Firewall/Configuracion-firewall-privado-asignacion-linodes.png)
+
+Para las reglas de entrada
+
+En la lista desplegable seleccionamos `Drop` e ingresamos las diferentes reglas que permitan los siguientes puertos: SSH, MySQL y otros puertos necesarios para que funcione correctamente
+
+Puertos TCP: 3306, 4567, 4568, 4444, 9146
+Puertos UDP: 3306, 4567, 4568, 4444
+
+
+En reglas de salida se mantiene por defecto
+
+![Firewall Cloud](/assets/Nube-Publica/Linode/Firewall/Configuracion-firewall-privado.png)
+
+# Crear Clones del servidor web
+
+Con el procedimiento realizado para crear las replicas de la base de datos, creamos clones de web1. 
+Las nuevas instancias se llamaran web2 y web3
+
+# Enlazar con el balanceador de carga
+
+Abrimos el balanceador de carga creado y agregamos en la configuracion existente nuevos nodos que perteneceran a web1 y web2
+
+# Esquema final 
