@@ -96,9 +96,9 @@ Para ello crearemos el siguiente Linode con las siguientes caracteristicas.
 
 ![Crear Linode](/assets/Nube-Publica/Linode/Linodes/Crear-linode.png)
 
-# Debian 11
+## Debian 11
 
-## Lanzar la consola Lish 
+### Lanzar la consola Lish 
 
 Seleccionamos la pantalla de Linodes y abrimos el Linode creado
 
@@ -107,7 +107,7 @@ Seleccionamos la pantalla de Linodes y abrimos el Linode creado
 Una vez que el estado de la instancia se encuentre en verde, abriremos `Launch LISH console` el cual abrirá la terminal de Linode para la instancia seleccionada.
 Comenzamos iniciando sesión con la cuenta root y la clave creada.
 
-## Configuración SSH
+### Configuración SSH
 
 Modificaremos el puerto de acceso de SSH con el fin de fortalecer la seguridad de la instancia en Linode. Esto se llevará a cabo a través de la configuración del archivo correspondiente.
 ~~~ bash
@@ -131,7 +131,7 @@ systemctl reload ssh.service
 
 Salimos `ctrl + d` y cerramos la consola de Lish.
 
-## Conectarse desde la terminal del usuario
+### Conectarse desde la terminal del usuario
 
 Para comenzar, accedemos a la terminal de Linux o al PowerShell de Windows y procedemos a iniciar sesión.
 ~~~ bash
@@ -145,7 +145,7 @@ Una vez que hayas iniciado sesión, procederemos a actualizar la distribución.
 apt update -y && apt upgrade -y
 ~~~
 
-## Configurar la hora
+### Configurar la hora
 
 En la terminal escribimos la siguiente linea 
 
@@ -156,7 +156,7 @@ sudo timedatectl set-timezone America/Guayaquil
 Si quieren cambiar a otra zona horaria
 > dpkg-reconfigure tzdata
 
-## Modificar el Hostname
+### Modificar el Hostname
 
 Cambiar el Hostname asignado por defecto por `web1` o cualquier otro que permita identificar la instancia creada.
 ~~~ bash
@@ -175,7 +175,7 @@ Agregamos el nuevo nombre después de la línea de localhost.
 
 Guardamos el archivo con `ctrl + o`, `Enter` y salimos con `ctrl + x`
 
-## Crear un nuevo usuario
+### Crear un nuevo usuario
 
 Para crear el nuevo usuario modificamos la palabra `usuario` por el nombre deseado.
 ~~~ bash
@@ -187,7 +187,7 @@ Ahora procederemos a añadir el usuario recién creado al grupo `sudo` con el fi
 usermod -a -G sudo usuario
 ~~~
 
-## Configuración avanzada de SSH
+### Configuración avanzada de SSH
 
 Abrimos el archivo de configuración SSH.
 ~~~ bash
@@ -214,7 +214,7 @@ Recargamos el servicio de SSH
 systemctl reload ssh.service
 ~~~
 
-## Nuevo shell en root - Opcional 
+### Nuevo shell en root - Opcional 
 
 Instalar fish como nuevo shell para la terminal de la instancia creada
 ~~~ bash
@@ -236,7 +236,7 @@ Iniciamos sesión con la nueva cuenta.
 ssh -p 9146 usuario@IP-web1
 ~~~
 
-## Nuevo shell para usuario - Opcional
+### Nuevo shell para usuario - Opcional
 
 Si has instalado Fish, puedes configurarlo como el shell por defecto para este usuario 
 ~~~ bash
@@ -245,7 +245,7 @@ chsh -s /usr/bin/fish
 fish
 ~~~
 
-## Generando Llaves SSH
+### Generando Llaves SSH
 
 Generaremos las llaves SSH y las almacenaremos en el directorio predeterminado y en `passphrase` lo dejamos en blanco.
 ~~~ bash
@@ -254,7 +254,7 @@ ssh-keygen -t rsa -b 4096 -C email@proveedor.com
 
 Para utilizar las llaves de SSH en vez de la contraseña, debemos copiar la llave que hemos creado en el equipo de usuario de la nube pública hacia el nuevo usuario de la instancia. 
 
-### Copiar la llave publica a la instancia
+#### Copiar la llave publica a la instancia
 
 Para ello abrimos una nueva terminal o powershell según sea el caso.
 
@@ -274,7 +274,7 @@ Y para usuarios de Windows:
 type $env:USERPROFILE\.ssh\id_rsa.pub | ssh -p 9146 usuario@IP-web1 "cat >> .ssh/authorized_keys"
 ~~~
 
-## Configuración complementaria SSH
+### Configuración complementaria SSH
 
 Iniciamos sesión en la instancia.
 ~~~ bash
@@ -304,7 +304,7 @@ sudo systemctl reload ssh.service
 
 Las configuraciones de SSH implementadas garantizan que el acceso a la cuenta root esté restringido, independientemente de si se utiliza una llave SSH o una contraseña. Además, se ha modificado el puerto por defecto para aumentar la seguridad. El acceso al sistema solo se permite mediante llaves públicas que estén registradas y autorizadas, ademas se controla el inicio de sesión solo a la lista de usuarios permitidos definida en `AllowUsers`.
 
-## Fail2ban
+### Fail2ban
 
 Fail2ban es una herramienta de seguridad diseñada para proteger sistemas Linux contra ataques de fuerza bruta y otros intentos de intrusión. Funciona monitoreando registros de registro (logs) de servicios como SSH, HTTP, FTP, y otros, y luego toma medidas para bloquear direcciones IP que muestren comportamiento sospechoso. Las reglas más utilizadas en Fail2ban dependen de los servicios que estás protegiendo, pero algunas de las más comunes incluyen:
 
@@ -339,8 +339,81 @@ port = 9146
 
 Guardamos `ctrl + o`, `Enter` y salimos `ctrl + x`
 
-Reiniciamos fail2ban para que los cambios surjan efecto y a su vez reiniciaremos la instancia
+Reiniciamos fail2ban `sudo service fail2ban restart` sin embargo para que los cambios realizados en Debian tomen efecto, reiniciaremos la instancia.
 ~~~ bash
 sudo reboot
 ~~~
+
+# Crear Balanceador de carga
+
+Una vez que hayas creado las diversas instancias, el siguiente paso es configurar el balanceador de carga para el servidor web que has creado. Para hacerlo, sigue estos pasos:
+
+- En el menú lateral, busca la opción `Node Balancer` y haz clic en ella. Esto abrirá el panel de control del balanceador de carga.
+
+- Dentro del panel de control, busca el botón `Crear` y selecciona esta opción. A continuación, se abrirá un menú en el que deberás proporcionar la siguiente información:
+  - Etiqueta del NodeBalancer: 'Balanceador-web'
+  - Etiquetas adicionales: 'balanceador'
+    - Región: Atlanta
+    - Configuración - Puerto 80:
+      - Puerto: 80
+      - Protocolo: HTTP
+      - Algoritmo: Round Robin
+      - Sesión persistente: Tabla
+      - Comprobaciones de salud activas: Http status
+      - Comprobaciones pasivas: Activadas
+
+- Ahora, en la sección 'Nodos de Respuesta', configura los nodos basándote en la información de la instancia creada. En este caso, los detalles son los siguientes:
+  - Etiqueta: 'web1'
+  - Dirección IP: IP-web1
+  - Puerto: 80
+  - Peso: 50
+
+![Node Balancer](/assets/Nube-Publica/Linode/Node-Balancer/Balanceador-web.png)
+
+
+## configuración de dominio
+
+Abrimos la consola de administración de NameCheap, seleccionamos el dominio comprado, y en la nueva pantalla de configuración del dominio buscamos `Advanced DNS`.
+
+Creamos un nuevo registro donde la Value: ingresaremos la dirección ip pública
+> - Type: A Record
+> - Host: @
+> - Value: IP-NodeBalancer
+
+## Certificado SSL
+
+Creamos el certificado por medio del sitio web [ZeroSSL](https://app.zerossl.com)
+
+Descargamos el certficado y lo descomprimimos
+
+Abrimos el Balanceador de carga creado y colocaremos la información según requiera.
+
+### Importando el certificado a Linode
+
+Descargamos el certificado 
+
+Abrimos el balanceador de carga 
+
+Agregamos una nueva configuración
+
+## Crear imagen 
+
+Con el fin de simplificar la configuración de múltiples instancias y ahorrar tiempo, se generará una imagen a partir de la instancia de Linode existente que se creó con el usuario por defecto. Para lograr esto, primero apagaremos el Linode que servirá como la base para la imagen y, a continuación, accederemos al enlace de imágenes."
+
+![Imagen base2](/assets/Imagenes/imagen-base-2.png)
+
+Clic en el botón de `Create Image`
+
+![Imagen base1](/assets/Imagenes/imagen-base-1.png)
+
+En esta pantalla, completaremos la información según las necesidades del caso:
+
+- Linode: servidor en Atlanta
+- Disco: Debian 11
+- Etiqueta: Imagen base
+- Descripción: Proporciona una descripción que permita identificar la imagen, tal como se muestra en la figura. 
+
+Una vez completado, procederemos a crear la imagen
+
+![Imagen base](/assets/Imagenes/Imagen-base.png)
 
