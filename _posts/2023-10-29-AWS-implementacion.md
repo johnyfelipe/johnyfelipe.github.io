@@ -399,8 +399,6 @@ En el menú lateral, elija la opción `Key pairs`, y proceda a crear una nueva c
 ## Certificados SSL
 {: data-toc-skip='' .mt-4 .mb-0 }
 
-{% include embed/youtube.html id='MJNRjJEH6sE' %}
-
 ### Grupo objetivo
 {: data-toc-skip='' .mt-4 .mb-0 }
 
