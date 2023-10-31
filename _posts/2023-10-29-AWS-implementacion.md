@@ -319,7 +319,7 @@ Para configurar la base de datos, procedemos a crearla utilizando la instrucció
 
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/RDS/bd-dev-test.png)
 
-# EC2
+# Crear instancia EC2
 
 Abrimos la pantalla de configuración de EC2.
 
@@ -363,7 +363,7 @@ En el menú lateral, elija la opción `Key pairs`, y proceda a crear una nueva c
 
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/EC2/instancia-datos.png)
 
-## configuración de dominio
+# configuración de dominio
 
 Abrimos [NameCheap](https://ap.www.namecheap.com) en la consola de administración, seleccionamos el dominio adquirido y lo abrimos, en la pantalla de configuración del dominio buscamos `Advanced DNS`.
 
@@ -374,7 +374,7 @@ En esta ventana creamos nuevos registro donde `Value`: ingresamos el DNS del `no
 
 ![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/NameCheap-AWS.png)
 
-## Certificado SSL
+# Certificado SSL
 
 [Video Tutorial](https://youtu.be/MJNRjJEH6sE)
 
@@ -408,7 +408,7 @@ Descargamos el certficado y lo descomprimimos
 
 ![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-8.png)
 
-## Grupos de seguridad
+# Grupos de seguridad
 
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/Grupos-Seguridad/grupo-objetivo.png)
 
@@ -418,7 +418,7 @@ Descargamos el certficado y lo descomprimimos
 
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/Grupos-Seguridad/grupo-objetivo-2.png)
 
-## Balanceador de Carga
+# Balanceador de Carga
 
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/Load-Balancer/balanceador-carga.png)
 
@@ -483,9 +483,9 @@ O desde la terminal de Linux
 ssh -i ~/RUTA/llave-prestashop.pem -p 9146 ubuntu@tienda.aws.jpm.lat
 ~~~
 
-## Crear usuario
+### Crear usuario
 
-### Nueva llave de seguridad
+#### Nueva llave de seguridad
 
 Creamos una nueva llave de seguridad por medio del asistente de `KeyPairs`
 
@@ -504,7 +504,7 @@ Una vez realizado abrimos el contenido de llave en caso de haber modificado la r
 
 ![Crear Llave](/assets/Nube-Publica/SSH/AWS/key-Contenido.png)
 
-### Nuevo usuario
+#### Nuevo usuario
 
 Iniciamos sesión en la instancia si aún la tenemos inciada.
 ~~~ bash
