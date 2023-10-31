@@ -367,17 +367,12 @@ En el menú lateral, elija la opción `Key pairs`, y proceda a crear una nueva c
 
 Abrimos [NameCheap](https://ap.www.namecheap.com) en la consola de administración, seleccionamos el dominio adquirido y lo abrimos, en la pantalla de configuración del dominio buscamos `Advanced DNS`.
 
-en esta ventana creamos nuevos registro donde `Value`: ingresamos la dirección ip pública del servidor web y en este caso agregamos del `node balancer`
-- Type: A Record
+En esta ventana creamos nuevos registro donde `Value`: ingresamos el DNS del `node balancer`
+- Type: CNAME
 - Host: @
-- Value: IPv4-NodeBalancer
+- Value: DNS-NodeBalancer
 
-![NameCheap](/assets/Nube-Publica/Linode/Certificado-Dominio/namecheap.png)
-
->Linode habilita por defecto ipv6 por ello también se podría crear un registro adicional para ello.
-> - Type: AAAA Record
-> - Host: @
-> - Value: IPv6-NodeBalancer
+![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/NameCheap-AWS.png)
 
 ## Certificado SSL
 
@@ -389,6 +384,29 @@ Descargamos el certficado y lo descomprimimos
 
 ![ZeroSSL](/assets/Nube-Publica/Linode/Certificado-Dominio/zerossl.png)
 
+## AWS certificate manager
+
+![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-1.png)
+
+
+![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-2.png)
+
+
+![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-3.png)
+
+
+![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-4.png)
+
+
+![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-5.png)
+
+
+![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-6.png)
+
+
+![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-7.png)
+
+![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-8.png)
 
 ## Grupos de seguridad
 
@@ -452,7 +470,7 @@ sudo systemctl restart ssh
 
 cerramos sesión `ctrl + d`. 
 
-![Conexión de la instancia](/assets/Imagenes/AWS/Cloud-shell-conexion.png)
+![Conexión de la instancia](/assets/Nube-Publica/AWS/EC2/Cloud-shell-conexion.png)
 
 Iniciamos sesión desde el powershell de windows `ssh -i $env:USERPROFILE\RUTA\llave-prestashop.pem -p 9146 ubuntu@tienda.aws.jpm.lat` o desde la terminal de Linux `ssh -i ~/RUTA/llave-prestashop.pem -p 9146 ubuntu@tienda.aws.jpm.lat`.
 
