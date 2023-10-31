@@ -107,7 +107,7 @@ author:
   name             : "Johny Plaza"
   avatar           : "https://scontent.fcue1-1.fna.fbcdn.net/v/t1.6435-9/116909258_10222835080935923_2919338190890102626_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=be3454&_nc_ohc=LpCdutdncvAAX-bAiTL&_nc_ht=scontent.fcue1-1.fna&oh=00_AfA04MWK_0LDp2Xxf_xUM2pxegIDJ2Ip8cAMhIM-3B8AoA&oe=65672170" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "Yo soy yo..."
-  location         : "En algun lado"
+  location         : "..."
   email            :
   links:
     - label: "Email"
@@ -220,7 +220,7 @@ sass:
 permalink: /:categories/:title/
 paginate: 5 # amount of posts to show
 paginate_path: /page:num/
-timezone: # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+timezone: America/Guayaquil # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 
 # Plugins (previously gems:)
@@ -293,3 +293,5 @@ defaults:
       toc: true
       toc_level: "Contenido"
       toc_icon: "cog"
+      show_date: true
+      search: true
