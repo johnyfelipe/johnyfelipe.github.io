@@ -429,25 +429,19 @@ Descargamos el certficado y lo descomprimimos
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/Load-Balancer/balanceador-carga-3.png)
 
 
-# PrestaShop en EC2
+# EC2
 
-Los requerimientos para instalar prestashop en este proyecto son:
-- NginX
-- PHP 7.4
-- Ubuntu 20.04
-- MySQL client
+## Configuración
 
-## Iniciar sesión
+### Inicio de sesión
 
-Debido a las medidas de seguridad implementadas en Amazon, la conexión desde un equipo de usuario en la nube pública a una instancia EC2 no es posible de manera directa. Para superar esta limitación, existen varios métodos recomendados. El enfoque óptimo es utilizar un servidor de VPN en nuestro equipo, lo que garantiza que nuestra información no se transmita en texto plano. Otra alternativa es cambiar el puerto de acceso a SSH, para ello iniciamos la terminal en la nube de Amazon.
+Debido a las medidas de seguridad implementadas en Amazon, la conexión desde un equipo de usuario en la nube pública a una instancia EC2 no es posible de manera directa. Para superar esta limitación, iniciamos la terminal en la nube de Amazon.
 
 Una vez que se abra la terminal y se cargue completamente, seleccionamos de la lista desplegable del shell, `upload file` para subir la llave creada.
 Modificamos la siguientes lineas según se requiera 
-
 ~~~ bash
 chmod 400 llave-prestashop.pem
 ~~~
-
 ~~~ bash
 ssh -i "llave-prestashp.pem" ubuntu@tienda.aws.jpm.lat
 ~~~
@@ -468,28 +462,144 @@ Reiniciamos el servicio ssh
 sudo systemctl restart ssh
 ~~~
 
-cerramos sesión `ctrl + d`. 
+Finalizamos sesión `ctrl + d` y cerramos la ventana. 
 
 ![Conexión de la instancia](/assets/Nube-Publica/AWS/EC2/Cloud-shell-conexion.png)
 
-Iniciamos sesión desde el powershell de windows `ssh -i $env:USERPROFILE\RUTA\llave-prestashop.pem -p 9146 ubuntu@tienda.aws.jpm.lat` o desde la terminal de Linux `ssh -i ~/RUTA/llave-prestashop.pem -p 9146 ubuntu@tienda.aws.jpm.lat`.
-
-Modificaremos según requiera
+Datos a modificar según se requiera
 - RUTA: donde se encuentra almacenada la llave la siguiente linea asume que esta almacenado en el usuario.
 - ruta de la llave: $env:USERPROFILE\RUTA\llave-prestashop.pem 
 - Puerto: 9146 
 - usuario: ubuntu
 - IP o DNS de la instancia: tienda.aws.jpm.lat
 
-## Actualizamos la instancia
-{: data-toc-skip='' .mt-4 .mb-0 }
+Iniciamos sesión desde el powershell de windows.
+~~~ bash
+ssh -i $env:USERPROFILE\RUTA\llave-prestashop.pem -p 9146 ubuntu@tienda.aws.jpm.lat` 
+~~~
 
+O desde la terminal de Linux 
+~~~ bash
+ssh -i ~/RUTA/llave-prestashop.pem -p 9146 ubuntu@tienda.aws.jpm.lat
+~~~
+
+## Crear usuario
+
+### Nueva llave de seguridad
+
+Creamos una nueva llave de seguridad por medio del asistente de `KeyPairs`
+
+![Crear Llave](/assets/Nube-Publica/SSH/AWS/key-1.png)
+
+al finalizar se descargara automaticamente la llave creada, abrimos una terminal o consola nos situamos dentro de la carpeta que contiene la llave. 
+En caso de usar Linux o macOS se debe cambiar los permisos
+~~~ bash
+chmod 400 newuser.pem
+~~~
+
+Una vez realizado abrimos el contenido de llave en caso de haber modificado la ruta se debe especificar `/ruta_llave/llave.pem`
+~~~ bash
+ ssh-keygen -y -f newuser.pem 
+~~~
+
+![Crear Llave](/assets/Nube-Publica/SSH/AWS/key-Contenido.png)
+
+### Nuevo usuario
+
+Iniciamos sesión en la instancia si aún la tenemos inciada.
+~~~ bash
+ssh -i "llave-prestashp.pem" ubuntu@tienda.aws.jpm.lat
+~~~
+
+Actualizamos la instancia 
 ~~~ bash
 sudo apt update -y && sudo apt upgrade -y
 ~~~
 
+Para crear el nuevo usuario modificamos la palabra `newuser` por el nombre deseado.
+~~~ bash
+sudo useradd -m newuser && sudo passwd newuser
+~~~
+
+Ahora procederemos a añadir el usuario recién creado al grupo `sudo` con el fin de otorgarle privilegios de administrador.
+~~~ bash
+sudo usermod -a -G sudo newuser
+~~~
+
+Cambiamos al usuario creado
+~~~ bash
+sudo su - newuser
+~~~
+
+Creamos las carpetas que van a contener las llaves publicas y le cambiamos los permisos
+~~~ bash
+mkdir .ssh
+chmod 700 .ssh
+~~~
+
+Creamos el archivo authorized_keys en .ssh y le cambiaremos los permisos
+~~~ bash
+touch .ssh/authorized_keys
+chmod 600 .ssh/authorized_keys
+~~~
+
+Abrimos el archivo creado
+~~~ bash
+nano .ssh/authorized_keys
+~~~
+
+Copiamos la informacion de la llave newuser a authorized_keys, guardamos el archivo `ctrl+o`, `Enter` y salimos `ctrl+d`
+
+Abrimos otra terminal e iniciamos sesión con el nuevo usuario
+
+Iniciamos sesión con el nuevo usuario situandonos en la carpeta que contiene la llave newuser.pen o se puede escificar la ruta.
+
+~~~ bash
+ssh -i "newuser.pem" -p 9146 newuser@tienda.aws.jpm.lat
+~~~
+
+## Fail2ban
+
+Fail2ban es una herramienta de seguridad diseñada para proteger sistemas Linux contra ataques de fuerza bruta y otros intentos de intrusión. Funciona monitoreando registros de registro (logs) de servicios como SSH, HTTP, FTP, y otros, y luego toma medidas para bloquear direcciones IP que muestren comportamiento sospechoso. Las reglas más utilizadas en Fail2ban dependen de los servicios que estás protegiendo, pero algunas de las más comunes incluyen:
+
+~~~ bash
+sudo apt install iptables fail2ban -y
+~~~
+
+~~~ bash
+sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+sudo nano /etc/fail2ban/jail.local
+~~~
+
+En ignoreip se especifican direcciones IP que no podran ser baneadas
+~~~ vim
+ignoreip = 127.0.0.1/8 191.100.75.121/32
+bantime = 24h
+maxretry = 3
+findtime = 600
+~~~
+
+Si hemos cambiado el puerto por defecto de SSH se debe especificar buscando en las siguientes lineas donde `port = ssh`
+
+~~~ vim
+[sshd]
+port = 9146
+
+[dropbear]
+port = 9146
+
+[selinux-ssh]
+port = 9146
+~~~
+
+Guardamos `ctrl + o`, `Enter` y salimos `ctrl + x`
+
+Reiniciamos fail2ban
+~~~ bash
+sudo service fail2ban restart
+~~~
+
 ## NginX
-{: data-toc-skip='' .mt-4 .mb-0 }
 
 Instalamos el servidor web en la instancia, para este proyecto es NginX y todos los programas necesarios para Prestashop, ademas de MariaDB como cliente para acceder a la base de datos.
 
@@ -509,13 +619,11 @@ sudo apt install nginx mariadb-client php7.4-fpm php7.4-common php7.4-mysql php7
 ~~~
 
 Comprobamos la versión `PHP` debido a que el siguiente proyecto esta basado en 7.4
-
 ~~~ bash
 php -version
 ~~~
 
 ## PrestaShop
-{: data-toc-skip='' .mt-4 .mb-0 }
 
  Modificaremos el archivo de configuración de `PHP` para que cumplan con los requerimientos para instalar `PrestaShop 8` y reiniciamos.
 
@@ -704,8 +812,6 @@ sudo systemctl restart php7.4-fpm.service
 ~~~
 
 ## Crear usuario y base de datos
-{: data-toc-skip='' .mt-4 .mb-0 }
-
 
 Iniciamos sesión desde la terminal de EC2 creada
 ~~~ bash

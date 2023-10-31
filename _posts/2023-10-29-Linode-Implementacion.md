@@ -331,11 +331,12 @@ Si hemos cambiado el puerto por defecto de SSH se debe especificar buscando en l
 
 ~~~ vim
 [sshd]
-enabled = true
 port = 9146
 
-[sshd-ddos]
-enabled = true
+[dropbear]
+port = 9146
+
+[selinux-ssh]
 port = 9146
 ~~~
 
