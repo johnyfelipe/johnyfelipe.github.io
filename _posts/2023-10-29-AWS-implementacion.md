@@ -407,8 +407,6 @@ Descargamos el certficado y lo descomprimimos
 
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/Grupos-Seguridad/grupo-objetivo.png)
 
-![Grupo de seguridad](/assets/Nube-Publica/AWS/Grupos-Seguridad/grupo-objetivo.png)
-
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/Grupos-Seguridad/grupo-objetivo-1.png)
 
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/Grupos-Seguridad/grupo-objetivo-2.png)
