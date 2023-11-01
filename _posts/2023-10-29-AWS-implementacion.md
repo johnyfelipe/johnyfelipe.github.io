@@ -403,11 +403,6 @@ Descargamos el certficado y lo descomprimimos
 
 ![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-6.png)
 
-
-![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-7.png)
-
-![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-8.png)
-
 # Grupos de seguridad
 
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/Grupos-Seguridad/grupo-objetivo.png)
@@ -428,6 +423,11 @@ Descargamos el certficado y lo descomprimimos
 
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/Load-Balancer/balanceador-carga-3.png)
 
+## Agregamos el certificado creado
+
+![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-7.png)
+
+![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-8.png)
 
 # Servidor WEB
 
