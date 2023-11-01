@@ -319,7 +319,7 @@ Para configurar la base de datos, procedemos a crearla utilizando la instrucció
 
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/RDS/bd-dev-test.png)
 
-# Crear instancia EC2
+# EC2
 
 Abrimos la pantalla de configuración de EC2.
 
@@ -429,7 +429,7 @@ Descargamos el certficado y lo descomprimimos
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/Load-Balancer/balanceador-carga-3.png)
 
 
-# EC2
+# Servidor WEB
 
 ## Configuración
 
