@@ -1330,4 +1330,3 @@ Las nuevas instancias se llamaran web2 y web3
 
 Abrimos el balanceador de carga creado y agregamos en la configuracion existente nuevos nodos que perteneceran a web1 y web2
 
-# Esquema final 
