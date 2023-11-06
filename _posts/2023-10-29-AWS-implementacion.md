@@ -890,7 +890,11 @@ Los permisos de de perfil son:
 
 ![Datos en general](/assets/Nube-Publica/Prestashop/Modificar-permisos.png)
 
-# Auto escalado
+# Grupo de escalado automático
+
+Un Auto Scaling group, contiene una colección de instancias de Amazon EC2 que se tratan como una agrupación lógica a efectos de escalado automático y administración. Un grupo de escalado automático también le permite utilizar características de Amazon EC2 Auto Scaling, como sustituciones de comprobaciones de estado y políticas de escalado. Tanto el mantenimiento del número de instancias en un grupo de Auto Scaling como el escalado automático son las funcionalidades básicas del servicio de Amazon EC2 Auto Scaling.
+
+El tamaño de un grupo de Auto Scaling depende del número de instancias que establezca como capacidad deseada. Puede ajustar su tamaño para satisfacer la demanda, ya sea de forma manual o mediante el uso de escalado automático. 
 
 ## AMI
 
@@ -902,7 +906,9 @@ Iniciamos creando la imagen de la instancia creada para que esta sirva como repl
 
 ## Crear plantilla
 
-Ahora crearemmos una plantilla
+Cuando crea un grupo de Auto Scaling, debe especificar la información necesaria para configurar las instancias de Amazon EC2, las zonas de disponibilidad y las subredes de VPC para las instancias, la capacidad deseada y los límites de capacidad mínima y máxima.
+
+Para configurar instancias de Amazon EC2 lanzadas por el grupo de Auto Scaling, puede especificar una plantilla de lanzamiento o una configuración de lanzamiento. El siguiente procedimiento demuestra cómo crear un grupo de Auto Scaling mediante una plantilla de lanzamiento. 
 
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/Plantilla/crear-plantilla.png)
 
@@ -915,6 +921,8 @@ Crearemos la plantilla apartir de la imagen creada
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/Plantilla/crear-plantilla-3.png)
 
 ## Grupo de auto escalado
+
+Si ha creado una plantilla de lanzamiento, puede crear un grupo de Auto Scaling que utilice una plantilla de lanzamiento como plantilla de configuración para sus instancias EC2. La plantilla de lanzamiento especifica información como el ID de AMI, el tipo de instancia, el key pair, los grupos de seguridad y el mapeo de dispositivos de bloques para las instancias. 
 
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/Auto-Escalado/auto-escalado.png)
 
