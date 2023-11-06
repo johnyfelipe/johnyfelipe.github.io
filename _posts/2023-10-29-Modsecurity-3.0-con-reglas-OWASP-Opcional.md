@@ -395,5 +395,6 @@ En el futuro, es posible que necesites actualizar Nginx para aprovechar nuevas f
 sudo apt-mark unhold nginx
 ~~~
 
-[Referencias](https://www.linuxcapable.com/how-to-install-modsecurity-3-nginx-owasp-crs-on-debian-linux/#Exploring-the-Core-Rule-Set-Configuration-on-Debian-and-ModSecurity-3)
+Referencia:
+[How to install modsecurity 3 nginx owasp crs on debian linux](https://www.linuxcapable.com/how-to-install-modsecurity-3-nginx-owasp-crs-on-debian-linux/#Exploring-the-Core-Rule-Set-Configuration-on-Debian-and-ModSecurity-3)
 
