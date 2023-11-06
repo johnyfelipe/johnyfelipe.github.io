@@ -1212,7 +1212,23 @@ Para finalizar en esta imagen tenemos el Back-End de PrestaShop
 
 ![Datos en general](/assets/Nube-Publica/Linode/Prestashop/Prestashop-backend.png)
 
-# Firewall
+## Crear nuevos usuarios en Prestashop
+
+En prestashop los usuarios se crean mediante perfiles de empleado, dentro del back-office de la tienda, los cuales van a tener permisos pre definidos sin embargo estos pueden ser modificados según la necesidades que el administrador lo requiera.
+
+![Datos en general](/assets/Nube-Publica/Prestashop/Team.png)
+
+![Datos en general](/assets/Nube-Publica/Prestashop/Prestashop-nuevo-empleado.png)
+
+Los permisos de de perfil son: 
+- SuperAdmin: Cuenta con todos los permisos sobre la tienda
+- Logistician: Solo puede acceder a ordenes, envios, a paginas de administración de inventario, y a partes de las paginas de catalogos y clientes.
+- translator: Solo tienen acceso a paginasde contenido para realizar la traducción del mismo, por ejemplo productos y categorias.
+- Salesman: Tiene los derechos del perfil de translator ademas puede acceder a las paginas de cliente, modulos y servicios web y algunos estados.
+
+![Datos en general](/assets/Nube-Publica/Prestashop/Modificar-permisos.png)
+
+# Firewall en las instancias - Opcional
 
 Linode recomienda tener firewall interno por cada instancia computacional creada por ello
 la configuración debe ser igual entre el firewall interno como con el cloud firewall de Linode 
@@ -1323,10 +1339,12 @@ En reglas de salida se mantiene por defecto
 
 # Crear Clones del servidor web
 
-Con el procedimiento realizado para crear las replicas de la base de datos, creamos clones de web1. 
+Con el procedimiento realizado para crear las replicas de la base de datos, creamos 2 clones de web1. 
 Las nuevas instancias se llamaran web2 y web3
 
 # Enlazar con el balanceador de carga
 
 Abrimos el balanceador de carga creado y agregamos en la configuracion existente nuevos nodos que perteneceran a web1 y web2
+
+# Modsecurity 3.0 con reglas OWASP - Opcional
 
