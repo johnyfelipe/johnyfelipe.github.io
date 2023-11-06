@@ -859,6 +859,37 @@ O si queremos eliminar la carpeta
 sudo rm -f /var/www/tienda/install
 ~~~
 
+En prestashop los usuarios se crean mediante perfiles de empleado, dentro del back-office de la tienda, los cuales van a tener permisos pre definidos sin embargo estos pueden ser modificados según la necesidades que el administrador lo requiera.
+
+![Datos en general](/assets/Nube-Publica/Prestashop/Team.png)
+
+![Datos en general](/assets/Nube-Publica/Prestashop/Prestashop-nuevo-empleado.png)
+
+Los permisos de de perfil son: 
+- SuperAdmin: Cuenta con todos los permisos sobre la tienda
+- Logistician: Solo puede acceder a ordenes, envios, a paginas de administración de inventario, y a partes de las paginas de catalogos y clientes.
+- translator: Solo tienen acceso a paginasde contenido para realizar la traducción del mismo, por ejemplo productos y categorias.
+- Salesman: Tiene los derechos del perfil de translator ademas puede acceder a las paginas de cliente, modulos y servicios web y algunos estados.
+
+![Datos en general](/assets/Nube-Publica/Prestashop/Modificar-permisos.png)
+
+
+### Crear nuevos usuarios en Prestashop
+
+En prestashop los usuarios se crean mediante perfiles de empleado, dentro del back-office de la tienda, los cuales van a tener permisos pre definidos sin embargo estos pueden ser modificados según la necesidades que el administrador lo requiera.
+
+![Datos en general](/assets/Nube-Publica/Prestashop/Team.png)
+
+![Datos en general](/assets/Nube-Publica/Prestashop/Prestashop-nuevo-empleado.png)
+
+Los permisos de de perfil son: 
+- SuperAdmin: Cuenta con todos los permisos sobre la tienda
+- Logistician: Solo puede acceder a ordenes, envios, a paginas de administración de inventario, y a partes de las paginas de catalogos y clientes.
+- translator: Solo tienen acceso a paginasde contenido para realizar la traducción del mismo, por ejemplo productos y categorias.
+- Salesman: Tiene los derechos del perfil de translator ademas puede acceder a las paginas de cliente, modulos y servicios web y algunos estados.
+
+![Datos en general](/assets/Nube-Publica/Prestashop/Modificar-permisos.png)
+
 # Auto escalado
 
 ## AMI
