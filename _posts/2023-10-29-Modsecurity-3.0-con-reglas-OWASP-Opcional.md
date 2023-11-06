@@ -6,17 +6,17 @@ tags:
   - Seguridad web
 ---
 
-Para aquellos que buscan proteger sus aplicaciones web de manera sólida, es esencial aprender a instalar Modsecurity 3, OWASP CRS con Nginx en Debian 11 Bullseye. Esta poderosa combinación proporciona una solución integral de firewall de aplicaciones web (WAF), crucial para proteger sus aplicaciones web de manera efectiva.
+Para aquellos interesados en garantizar una sólida protección para sus aplicaciones web, resulta fundamental adquirir competencias en la instalación de ModSecurity 3, junto con el conjunto de reglas OWASP CRS, en un entorno Nginx implementado sobre una distribución Debian 11 Bullseye. Esta configuración de alto rendimiento y seguridad se erige como una solución integral de Firewall de Aplicaciones Web (WAF), constituyendo un componente esencial para salvaguardar de manera efectiva sus aplicaciones web
 
-# Pasos previos a la instalación de ModSecurity 3 con Nginx en Debian 11
+# Pasos previos
 
-## Paso 1: actualice los paquetes del sistema Debian antes de ModSecurity 3 con la instalación de Nginx
+## Paso 1: actualice los paquetes del sistema
 
 ~~~ bash
 sudo apt update && sudo apt upgrade
 ~~~
 
-## Paso 2: eliminar la instalación de NGINX existente (situacional)
+## Paso 2: eliminar la instalación de NGINX
 
 ~~~ bash
 sudo systemctl stop nginx
@@ -28,7 +28,7 @@ sudo apt purge nginx
 sudo apt autoremove nginx
 ~~~
 
-## Paso 3: Importe NGINX PPA para ModSecurity 3 y Debian para la última versión (opcional)
+## Paso 3: Importe NGINX PPA para ModSecurity 3 y Debian para la última versión
 
 ~~~ bash
 sudo curl -sSL https://packages.sury.org/nginx-mainline/README.txt | sudo bash -x
@@ -258,6 +258,8 @@ Agregue las siguientes lineas dentro del bloque http {}
 modsecurity on;
 modsecurity_rules_file /etc/nginx/modsec/modsec-config.conf;
 ~~~
+Guarde el archivo de configuración `Ctrl + O`, `Enter` y salga `Ctrl + x`
+
 
 ## Paso 2: cree directorios y archivos de ModSecurity 3
 
@@ -276,7 +278,8 @@ Localice las siguientes lineas y modifique según lo siguiente
 SecRuleEngine On
 SecAuditLogParts ABCEFHJKZ
 ~~~
-Guarde y salga
+Guarde el archivo de configuración `Ctrl + O`, `Enter` y salga `Ctrl + x`
+
 
 ## Paso 3: cree modsec-config.conf en Debian
 
@@ -288,7 +291,7 @@ Incluya la siguiente línea:
 ~~~ vim
 Include /etc/nginx/modsec/modsecurity.conf
 ~~~
-Guarde y salga
+Guarde el archivo de configuración `Ctrl + O`, `Enter` y salga `Ctrl + x`
 
 ~~~ bash
 sudo cp /usr/local/src/ModSecurity/unicode.mapping /etc/nginx/modsec/
@@ -306,7 +309,7 @@ sudo systemctl restart nginx
 
 # Instale el conjunto de reglas principales de OWASP dentro de ModSecurity 3 en Debian 1
 
-> OWASP CRS es una regla de firewall de aplicaciones web (WAF) reconocida y confiable. Al actuar como una sólida barrera protectora contra la mayoría de las amenazas contemporáneas en Internet, estas reglas son competentes para identificar posibles ataques y prevenirlos. Este recurso fundamental es la base de muchos sistemas similares
+> El conjunto de reglas de seguridad de aplicaciones web de la Fundación Open Web Application Security Project (OWASP CRS) representa una solución de firewall de aplicaciones web (WAF) ampliamente reconocida y altamente confiable. Estas reglas desempeñan un papel crucial al fungir como una barrera defensiva sólida y efectiva contra la gran variedad de amenazas que prevalecen en el entorno de Internet contemporáneo. Su competencia radica en la habilidad para identificar y prevenir potenciales ataques cibernéticos. Este recurso esencial sienta las bases para la funcionalidad de numerosos sistemas de seguridad similares
 
 ## Paso 1: regresar al directorio ModSecurity en Debian
 
@@ -324,7 +327,7 @@ sudo chown -R $USER:$USER /etc/nginx/modsec/
 wget https://github.com/coreruleset/coreruleset/archive/refs/tags/v3.3.4.tar.gz
 ~~~
 
-> Si prefiere mantenerse actualizado con los últimos desarrollos, obtenga la versión de compilación nocturna. Esta versión incorpora los cambios y mejoras más recientes, aunque puede ser menos estable y requerir actualizaciones frecuentes. Lo ideal es que los usuarios avanzados utilicen esta versión. wget https://github.com/coreruleset/coreruleset/archive/refs/tags/nightly.tar.gz
+> Si su preferencia es mantenerse al tanto de los avances más recientes, le recomendamos adquirir la versión de compilación nocturna. Esta variante integra las modificaciones y mejoras más recientes, aunque cabe destacar que su estabilidad puede ser menor, lo que podría conllevar actualizaciones frecuentes. Esta opción está concebida especialmente para usuarios con conocimientos avanzados, quienes encontrarán en ella un recurso idóneo para sus necesidades. wget https://github.com/coreruleset/coreruleset/archive/refs/tags/nightly.tar.gz
 > La versión Nightly requiere de mucha experiencia 
 
 ## Paso 3: Extraiga el archivo OWASP CRS en Debia
@@ -350,7 +353,7 @@ Dentro de este archivo, incluya las dos líneas siguientes para incorporar la co
 Include /etc/nginx/modsec/coreruleset-3.3.4/crs-setup.conf
 Include /etc/nginx/modsec/coreruleset-3.3.4/rules/*.conf
 ~~~
-Guarde y salga
+Guarde el archivo de configuración `Ctrl + O`, `Enter` y salga `Ctrl + x`
 
 > Recuerde reemplazar “coreruleset-3.3.4” con la versión que realmente descargó. Asegúrese de consultar periódicamente la página de la versión actual; Por lo general, aparece una nueva versión estable cada 3 a 6 meses.
 
@@ -366,13 +369,13 @@ sudo systemctl restart nginx
 
 ## Realizar una solicitud de prueba
 
-~~~ vim
+~~~ url
 https://www.artcie.lat/index.html?exec=/bin/bash
 ~~~
 
 o
 
-~~~ vim
+~~~ url
 http://ip
 ~~~
 
