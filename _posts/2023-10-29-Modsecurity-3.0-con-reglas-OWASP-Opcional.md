@@ -250,7 +250,7 @@ sudo nano /etc/nginx/nginx.conf
 
 Incorpore la siguiente línea
 ~~~ vim
-load_module etc/nginx/modules/ngx_http_modsecurity_module.so;
+load_module /etc/nginx/modules/ngx_http_modsecurity_module.so;
 ~~~
 
 Agregue las siguientes lineas dentro del bloque http {}
@@ -395,6 +395,7 @@ En el futuro, es posible que necesites actualizar Nginx para aprovechar nuevas f
 sudo apt-mark unhold nginx
 ~~~
 
-Referencia:
+# Referencia:
+
 [How to install modsecurity 3 nginx owasp crs on debian linux](https://www.linuxcapable.com/how-to-install-modsecurity-3-nginx-owasp-crs-on-debian-linux/#Exploring-the-Core-Rule-Set-Configuration-on-Debian-and-ModSecurity-3)
 
