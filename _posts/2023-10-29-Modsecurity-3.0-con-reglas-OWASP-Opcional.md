@@ -6,17 +6,21 @@ tags:
   - Seguridad web
 ---
 
-Para aquellos interesados en garantizar una sólida protección para sus aplicaciones web, resulta fundamental adquirir competencias en la instalación de ModSecurity 3, junto con el conjunto de reglas OWASP CRS, en un entorno Nginx implementado sobre una distribución Debian 11 Bullseye. Esta configuración de alto rendimiento y seguridad se erige como una solución integral de Firewall de Aplicaciones Web (WAF), constituyendo un componente esencial para salvaguardar de manera efectiva sus aplicaciones web
+Para garantizar una sólida protección para las aplicaciones web, resulta fundamental adquirir competencias en la instalación de ModSecurity 3, junto con el conjunto de reglas OWASP CRS. Esta configuración de alto rendimiento y seguridad se erige como una solución integral de Firewall de Aplicaciones Web (WAF), constituyendo un componente esencial para salvaguardar de manera efectiva las aplicaciones web
+
+[Video Tutorial de ModSecurity](https://youtu.be/z3d-5INqg-g)
 
 # Pasos previos
 
-## Paso 1: actualice los paquetes del sistema
+## Paso 1: Actualizar paquetes del sistema
 
 ~~~ bash
 sudo apt update && sudo apt upgrade
 ~~~
 
-## Paso 2: eliminar la instalación de NGINX
+## Paso 2: Eliminar la instalación de NGINX
+
+Para evitar incompatibilidad entre herramientas es preferible eliminar NginX y realizar un respaldo de toda configuración sensible
 
 ~~~ bash
 sudo systemctl stop nginx
@@ -28,13 +32,13 @@ sudo apt purge nginx
 sudo apt autoremove nginx
 ~~~
 
-## Paso 3: Importe NGINX PPA para ModSecurity 3 y Debian para la última versión
+## Paso 3: Importar NGINX PPA para ModSecurity 3 y Debian
 
 ~~~ bash
 sudo curl -sSL https://packages.sury.org/nginx-mainline/README.txt | sudo bash -x
 ~~~
 
-## Paso 4: Actualizar la caché APT después de la importación de Nginx PPA en Debian
+## Paso 4: Actualizar la caché APT
 
 ~~~ bash
 sudo apt update
@@ -46,7 +50,7 @@ sudo apt install nginx-core nginx-common nginx
 
 > Durante la instalación, es posible que encuentre un mensaje que le pregunte si desea conservar o reemplazar su /etc/nginx/nginx.conf archivo de configuración existente. Para evitar interrupciones imprevistas, generalmente es recomendable conservar su archivo de configuración actual presionando n.
 
-## Paso 5: Importar el archivo de configuración PPA del código fuente de NGINX en Debian
+## Paso 5: Importar el archivo de configuración PPA del código fuente de NGINX a Debian
 
 ~~~ bash
 sudo nano /etc/apt/sources.list.d/nginx-mainline.list
@@ -134,11 +138,11 @@ sudo ./configure
 
 ## Paso 4: Compile el código fuente de ModSecurity 3
 
+> Para acelerar el proceso de compilación en servidores de alto rendimiento, ejecute make con la opción -j, seguido de la cantidad de núcleos de CPU que tiene su servidor. Por ejemplo, para un servidor con seis núcleos de CPU, utilice el comando: sudo make -j 6
+
 ~~~ bash
 sudo make
 ~~~
-
-> Para acelerar el proceso de compilación en servidores de alto rendimiento, ejecute make con la opción -j, seguido de la cantidad de núcleos de CPU que tiene su servidor. Por ejemplo, para un servidor con seis núcleos de CPU, utilice el comando: sudo make -j 6
 
 ## Paso 5: instale el código compilado de ModSecurity 3
 
@@ -146,7 +150,7 @@ sudo make
 sudo make install
 ~~~
 
-# Instale el conector ModSecurity-nginx en Debian 1
+# Instale el conector ModSecurity-nginx
 
 ## Paso 1: Obtenga la fuente del conector ModSecurity-nginx en Debian
 
@@ -179,7 +183,7 @@ sudo ./configure --with-compat --add-dynamic-module=/usr/local/src/ModSecurity-n
 sudo make modules
 ~~~
 
-## Paso 4: Instale el módulo dinámico ModSecurity 3
+## Paso 4: Instale el módulo dinámico de ModSecurity 3
 
 ~~~ bash
 sudo mkdir /etc/nginx/modules/
@@ -188,7 +192,7 @@ sudo mkdir /etc/nginx/modules/
 sudo cp objs/ngx_http_modsecurity_module.so /etc/nginx/modules/
 ~~~
 
-# Habilite el conector ModSecurity-nginx con Nginx en Debian 11
+# Habilite el conector ModSecurity-nginx
 
 ## Paso 1: Activar ModSecurity dentro de nginx.conf
 
@@ -257,6 +261,8 @@ sudo systemctl restart nginx
 # Instale el conjunto de reglas principales de OWASP dentro de ModSecurity 3 en Debian 1
 
 > El conjunto de reglas de seguridad de aplicaciones web de la Fundación Open Web Application Security Project (OWASP CRS) representa una solución de firewall de aplicaciones web (WAF) ampliamente reconocida y altamente confiable. Estas reglas desempeñan un papel crucial al fungir como una barrera defensiva sólida y efectiva contra la gran variedad de amenazas que prevalecen en el entorno de Internet contemporáneo. Su competencia radica en la habilidad para identificar y prevenir potenciales ataques cibernéticos. Este recurso esencial sienta las bases para la funcionalidad de numerosos sistemas de seguridad similares
+
+[Sitio oficial OWASP](https://owasp.org/www-project-modsecurity-core-rule-set/)
 
 ## Paso 1: regresar al directorio ModSecurity en Debian
 
