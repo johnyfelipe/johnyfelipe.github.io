@@ -65,62 +65,6 @@ sudo apt update
 
 # Descargue Nginx Source para ModSecurity 3 en Debian 11
 
-## Paso 1: actualice los paquetes del sistema Debian antes de ModSecurity 3 con la instalación de Nginx
-
-~~~ bash
-sudo apt update && sudo apt upgrade
-~~~
-
-## Paso 2: eliminar la instalación de NGINX existente (situacional)
-
-> Este paso es opcional si ya ha instalado Nginx. Si decide eliminarlo y tiene una configuración compleja, asegúrese de hacer una copia de seguridad de sus archivos de configuración.
-
-~~~ bash
-sudo systemctl stop nginx
-~~~
-~~~ bash
-sudo apt purge nginx
-~~~
-~~~ bash
-sudo apt autoremove nginx
-~~~
-
-## Paso 3: Importe NGINX PPA para ModSecurity 3 y Debian para la última versión
-
-~~~ bash
-sudo curl -sSL https://packages.sury.org/nginx-mainline/README.txt | sudo bash -x
-~~~
-
-## Paso 4: Actualizar la caché APT después de la importación de Nginx PPA en Debian
-
-~~~ bash
-sudo apt update
-~~~
-~~~ bash
-sudo apt install nginx-core nginx-common nginx
-~~~
-
-> Durante la instalación, es posible que encuentre un mensaje que le pregunte si desea conservar o reemplazar su /etc/nginx/nginx.confarchivo de configuración existente. Para evitar interrupciones imprevistas, generalmente es recomendable conservar su archivo de configuración actual presionando n.
-
-## Paso 5: Importar el archivo de configuración PPA del código fuente de NGINX en Debian
-
-~~~ bash
-sudo nano /etc/apt/sources.list.d/nginx-mainline.list
-~~~
-
-Agregue la siguiente línea directamente debajo de la línea fuente original:
-~~~ vim
-deb-src [signed-by=/usr/share/keyrings/deb.sury.org-nginx-mainline.gpg] https://packages.sury.org/nginx-mainline/ bookworm main
-~~~
-
-Guarde el archivo de configuración `Ctrl + O`, `Enter` y salga `Ctrl + x`
-
-~~~ bash
-sudo apt update
-~~~
-
-# Descargue Nginx Source para ModSecurity 3 en Debian 11
-
 ## Paso 1: crear una estructura de directorios para Nginx Source en Debian
 
 ~~~ bash
@@ -207,7 +151,7 @@ sudo make install
 ## Paso 1: Obtenga la fuente del conector ModSecurity-nginx en Debian
 
 ~~~ bash
-git clone --depth 1 https://github.com/SpiderLabs/ModSecurity-nginx.git /usr/local/src/ModSecurity-nginx/
+sudo git clone --depth 1 https://github.com/SpiderLabs/ModSecurity-nginx.git /usr/local/src/ModSecurity-nginx/
 ~~~
 
 ## Paso 2: Instale los paquetes iniciales del conector ModSecurity-nginx
@@ -223,7 +167,12 @@ sudo apt build-dep nginx && sudo apt install uuid-dev
 ## Paso 3: Cree el entorno del conector ModSecurity-nginx en Debian
 
 ~~~ bash
-./configure --with-compat --add-dynamic-module=/usr/local/src/ModSecurity-nginx
+sudo mkdir -p /usr/local/nginx/logs
+sudo touch /usr/local/nginx/logs/error.log
+~~~
+
+~~~ bash
+sudo ./configure --with-compat --add-dynamic-module=/usr/local/src/ModSecurity-nginx
 ~~~
 
 ~~~ bash
@@ -233,11 +182,10 @@ sudo make modules
 ## Paso 4: Instale el módulo dinámico ModSecurity 3
 
 ~~~ bash
-sudo cp objs/ngx_http_modsecurity_module.so /etc/nginx/modules/
-~~~
-
-~~~ bash
 sudo mkdir /etc/nginx/modules/
+~~~
+~~~ bash
+sudo cp objs/ngx_http_modsecurity_module.so /etc/nginx/modules/
 ~~~
 
 # Habilite el conector ModSecurity-nginx con Nginx en Debian 11
@@ -259,7 +207,6 @@ modsecurity on;
 modsecurity_rules_file /etc/nginx/modsec/modsec-config.conf;
 ~~~
 Guarde el archivo de configuración `Ctrl + O`, `Enter` y salga `Ctrl + x`
-
 
 ## Paso 2: cree directorios y archivos de ModSecurity 3
 
