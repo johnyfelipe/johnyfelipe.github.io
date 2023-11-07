@@ -939,3 +939,49 @@ Si ha creado una plantilla de lanzamiento, puede crear un grupo de Auto Scaling 
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/Auto-Escalado/auto-escalado-prueba-1.png)
 
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/Auto-Escalado/auto-escalado-prueba-2.png)
+
+
+# WAF
+
+AWS WAFes un firewall de aplicaciones web que le permite supervisar las solicitudes HTTP (S) que se reenvían a los recursos de aplicaciones web protegidas. Puede proteger varios recursos entre ellos "Application Load Balancer"
+
+AWS WAFle permite controlar el acceso a su contenido. En función de los criterios que especifique, como las direcciones IP desde las que se originan las solicitudes o los valores de las cadenas de consulta, el servicio asociado al recurso protegido responde a las solicitudes con el contenido solicitado, con un código de estado HTTP 403 (prohibido) o con una respuesta personalizada. 
+
+En la ACL web, se crean reglas para definir los patrones de tráfico que se deben buscar en las solicitudes y especificar las acciones que se deben tomar en caso de que coincidan con las solicitudes. Las opciones de acción incluyen las siguientes:
+
+- Permita que las solicitudes vayan al recurso protegido para su procesamiento y respuesta.
+- Bloquee las solicitudes.
+- Cuente las solicitudes.
+- Realiza comprobaciones CAPTCHA o compáralas con las solicitudes para verificar el uso estándar del navegador por parte de los usuarios humanos.
+
+## Este tutorial muestra cómo utilizar AWS WAF para realizar las siguientes tareas:
+
+### Configuración de AWS WAF.
+
+Cree una lista de control de acceso web (ACL web) mediante el asistente de la consola de AWS WAF.
+
+![Grupo de seguridad](/assets/Nube-Publica/AWS/WAF/Get-started-with-AWS-WAF.png)
+
+![Grupo de seguridad](/assets/Nube-Publica/AWS/WAF/Describe-Web-ACL-And-associate-it-to-AWS.png)
+
+![Grupo de seguridad](/assets/Nube-Publica/AWS/WAF/Add-AWS-Resources.png)
+
+Elija los recursos de AWS que desea que AWS WAF busque en las solicitudes web. En este tutorial se explican los pasos para un Application Load Balancer. El proceso es básicamente el mismo para una API REST de Amazon API Gateway, Amazon CloudFront, una API de AWS AppSync GraphQL, un grupo de usuarios de Amazon Cognito, un AWS App Runner servicio o una instancia de Verified Access.
+
+![Grupo de seguridad](/assets/Nube-Publica/AWS/WAF/Add-managed-rule-group-sencillo.png)
+
+Añada las reglas y los grupos de reglas que desea utilizar para filtrar las solicitudes web. Por ejemplo, puede especificar las direcciones IP desde las que se originan las solicitudes y especificar valores en la solicitud que solo utilizan los atacantes. Para cada regla, debe especificar cómo gestionar las solicitudes web coincidentes. Puedes hacer cosas como bloquearlas o contarlas, y puedes ejecutar desafíos de bots como CAPTCHA. Defina una acción para cada regla que defina dentro de una ACL web y para cada regla que defina dentro de un grupo de reglas.
+
+![Grupo de seguridad](/assets/Nube-Publica/AWS/WAF/Add-managed-rule-groups-full.png)
+
+Especifique una acción predeterminada para la ACL web, ya sea Block oAllow. Esta es la acción que AWS WAF se lleva a cabo cuando las reglas de la ACL web no la permiten ni bloquean de forma explícita. 
+
+![Grupo de seguridad](/assets/Nube-Publica/AWS/WAF/Create-web-ACL-Step-2-Add-rules-and-rule-groups.png)
+
+![Grupo de seguridad](/assets/Nube-Publica/AWS/WAF/Step-3-Set-rule-priority.png)
+
+![Grupo de seguridad](/assets/Nube-Publica/AWS/WAF/Create-web-ACL-Step-4-Configure-metrics.png)
+
+![Grupo de seguridad](/assets/Nube-Publica/AWS/WAF/Step-5-Review-and-create-web-ACL.png)
+
+![Grupo de seguridad](/assets/Nube-Publica/AWS/WAF/web-acls.png)
