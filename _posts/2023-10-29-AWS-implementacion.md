@@ -954,7 +954,7 @@ En la ACL web, se crean reglas para definir los patrones de tráfico que se debe
 - Cuente las solicitudes.
 - Realiza comprobaciones CAPTCHA o compáralas con las solicitudes para verificar el uso estándar del navegador por parte de los usuarios humanos.
 
-## Este tutorial muestra cómo utilizar AWS WAF para realizar las siguientes tareas:
+## Este tutorial muestra cómo utilizar AWS WAF de una manera básica
 
 ### Configuración de AWS WAF.
 
