@@ -974,7 +974,9 @@ Añada las reglas y los grupos de reglas que desea utilizar para filtrar las sol
 
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/WAF/Add-managed-rule-groups-full.png)
 
-Especifique una acción predeterminada para la ACL web, ya sea Block oAllow. Esta es la acción que AWS WAF se lleva a cabo cuando las reglas de la ACL web no la permiten ni bloquean de forma explícita. 
+Especifique una acción predeterminada para la ACL web, ya sea Block o Allow. Esta es la acción que AWS WAF se lleva a cabo cuando las reglas de la ACL web no la permiten ni bloquean de forma explícita.
+
+> Es preferible dejar por defecto Allow 
 
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/WAF/Create-web-ACL-Step-2-Add-rules-and-rule-groups.png)
 
