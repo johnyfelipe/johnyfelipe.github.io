@@ -382,25 +382,53 @@ Una vez que hayas creado las diversas instancias, el siguiente paso es configura
 
 Abrimos [NameCheap](https://ap.www.namecheap.com) en la consola de administración, seleccionamos el dominio adquirido y lo abrimos, en la pantalla de configuración del dominio buscamos `Advanced DNS`.
 
-en esta ventana creamos nuevos registro donde `Value`: ingresamos la dirección ip pública del servidor web y en este caso agregamos del `node balancer`
-- Type: A Record
-- Host: @
-- Value: IPv4-NodeBalancer
+![NameCheap](https://namecheap.simplekb.com/SiteContents/2-7C22D5236A4543EB827F3BD8936E153E/media/nctest_manage.png)
 
-![NameCheap](/assets/Nube-Publica/Linode/Certificado-Dominio/namecheap.png)
+![NameCheap](https://namecheap.simplekb.com/SiteContents/2-7C22D5236A4543EB827F3BD8936E153E/media/gotoADNS.png)
 
->Linode habilita por defecto ipv6 por ello también se podría crear un registro adicional para ello.
-> - Type: AAAA Record
-> - Host: @
-> - Value: IPv6-NodeBalancer
+En esta ventana creamos nuevos registro donde `Value`: ingresamos el IP del `Load balancer`
+- Para Ipv4
+  - Type: A
+  - Host: @
+  - Value: IPv4-Load-Balancer
+- Para Ipv6
+  - Type: AAAA
+  - Host: @
+  - Value: IPv6-Load-Balancer
+
+![NameCheap](https://namecheap.simplekb.com/SiteContents/2-7C22D5236A4543EB827F3BD8936E153E/media/d026.png)
+
+![NameCheap](https://namecheap.simplekb.com/SiteContents/2-7C22D5236A4543EB827F3BD8936E153E/media/d027.png)
 
 ## Certificado SSL
 
 [Video Tutorial](https://youtu.be/MJNRjJEH6sE)
 
-Abrimos [ZeroSSL](https://app.zerossl.com), y en la ventana seleccionamos el registro y en el boton de lista desplegable seleccionamos descargar. 
+Abrimos [ZeroSSL](https://app.zerossl.com).
 
-Descargamos el certficado y lo descomprimimos
+- Para crear un certificado SSL, navegamos por la pagina de New certificate, ingresamos el dominio
+
+![zerossl](https://help.zerossl.com/hc/article_attachments/360100919013/5fc511d381350.png)
+
+- Ahora necesitamos escoger entre 90 dias o 1 año de validez para el certificado SSL
+
+![zerossl](https://help.zerossl.com/hc/article_attachments/360100919033/5fc511d48e156.png)
+
+- Antes de finalizar la orden, escogemos Auto-Generate CSR para que automaticamente genere la información requerida.
+
+![zerossl](https://help.zerossl.com/hc/article_attachments/360100919053/5fc511d51d428.png)
+
+- Dependiendo del paso 1 a 3, el sistema automaticamente detectara cual es la subcripción que necesita.
+
+![zerossl](https://help.zerossl.com/hc/article_attachments/360100919073/5fc511d585c65.png)
+
+- Una vez terminado con este proceso, se abrira un asistente que nos indicara validar el dominio, para ello ingresaremos a la consolo de aministración del proveedor de dominio y crearemos un nuevo registro para vincular la información que nos pide.
+
+![zerossl](/assets/Nube-Publica/Linode/Certificado-Dominio/zerossl-validar.png)
+
+Consola de administración avanzada de Namecheap
+
+![zerossl](/assets/Nube-Publica/Linode/Certificado-Dominio/namecheap-zerossl.png)
 
 ![ZeroSSL](/assets/Nube-Publica/Linode/Certificado-Dominio/zerossl.png)
 
