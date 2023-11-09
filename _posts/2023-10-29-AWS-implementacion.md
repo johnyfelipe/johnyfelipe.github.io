@@ -367,10 +367,20 @@ En el menú lateral, elija la opción `Key pairs`, y proceda a crear una nueva c
 
 Abrimos [NameCheap](https://ap.www.namecheap.com) en la consola de administración, seleccionamos el dominio adquirido y lo abrimos, en la pantalla de configuración del dominio buscamos `Advanced DNS`.
 
+![NameCheap](https://namecheap.simplekb.com/SiteContents/2-7C22D5236A4543EB827F3BD8936E153E/media/nctest_manage.png)
+
+![NameCheap](https://namecheap.simplekb.com/SiteContents/2-7C22D5236A4543EB827F3BD8936E153E/media/gotoADNS.png)
+
 En esta ventana creamos nuevos registro donde `Value`: ingresamos el DNS del `node balancer`
 - Type: CNAME
 - Host: @
 - Value: DNS-NodeBalancer
+
+![NameCheap](https://namecheap.simplekb.com/SiteContents/2-7C22D5236A4543EB827F3BD8936E153E/media/d026.png)
+
+![NameCheap](https://namecheap.simplekb.com/SiteContents/2-7C22D5236A4543EB827F3BD8936E153E/media/d027.png)
+
+Al finalizar tendremos la siguiente pantalla.
 
 ![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/NameCheap-AWS.png)
 
@@ -378,54 +388,131 @@ En esta ventana creamos nuevos registro donde `Value`: ingresamos el DNS del `no
 
 [Video Tutorial](https://youtu.be/MJNRjJEH6sE)
 
-Abrimos [ZeroSSL](https://app.zerossl.com), y en la ventana seleccionamos el registro y en el boton de lista desplegable seleccionamos descargar. 
+Abrimos [ZeroSSL](https://app.zerossl.com).
 
-Descargamos el certficado y lo descomprimimos
+- Para crear un certificado SSL, navegamos por la pagina de New certificate, ingresamos el dominio
+
+![zerossl](https://help.zerossl.com/hc/article_attachments/360100919013/5fc511d381350.png)
+
+- Ahora necesitamos escoger entre 90 dias o 1 año de validez para el certificado SSL
+
+![zerossl](https://help.zerossl.com/hc/article_attachments/360100919033/5fc511d48e156.png)
+
+- Antes de finalizar la orden, escogemos Auto-Generate CSR para que automaticamente genere la información requerida.
+
+![zerossl](https://help.zerossl.com/hc/article_attachments/360100919053/5fc511d51d428.png)
+
+- Dependiendo del paso 1 a 3, el sistema automaticamente detectara cual es la subcripción que necesita.
+
+![zerossl](https://help.zerossl.com/hc/article_attachments/360100919073/5fc511d585c65.png)
+
+- Una vez terminado con este proceso, se abrira un asistente que nos indicara validar el dominio, para ello ingresaremos a la consolo de aministración del proveedor de dominio y crearemos un nuevo registro para vincular la información que nos pide.
+
+![zerossl](/assets/Nube-Publica/Linode/Certificado-Dominio/zerossl-validar.png)
+
+Consola de administración avanzada de Namecheap
+
+![zerossl](/assets/Nube-Publica/Linode/Certificado-Dominio/namecheap-zerossl.png)
 
 ![ZeroSSL](/assets/Nube-Publica/Linode/Certificado-Dominio/zerossl.png)
 
 ## AWS certificate manager
 
-![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-1.png)
+Para importar un certificado SSL/TLS autofirmado a ACM, debe proporcionar tanto el certificado como su clave privada. Para importar un certificado firmado por una entidad de certificación (CA) que no sea de AWS, también deberá incluir las claves públicas y privadas de certificación.
+
+- Abra la [consola de ACM](https://console.aws.amazon.com/acm/home), Si es la primera vez que utiliza ACM, busque el encabezado AWS Certificate Manager y seleccione el botón Get started (Empezar) que hay debajo de él.
+- Seleccione Import a certificate.
+- Realice lo siguiente:
+  - En el Certificate body, pegue el certificado codificado en PEM para importar. Debería comenzar con -----BEGIN CERTIFICATE----- y terminar con -----END CERTIFICATE-----.
+  - En Certificate private key (Clave privada del certificado), pegue la clave privada codificada en PEM y sin cifrar del certificado. Debería comenzar con -----BEGIN PRIVATE KEY----- y terminar con -----END PRIVATE KEY-----.
+  - (Opcional) En Certificate chain, pegue la cadena de certificados codificada en PEM.
+- Seleccione Review and import.
+- En la página Review and import (Revisar e importar), verifique los metadatos mostrados sobre el certificado para asegurarse de que es lo que pretendía. Estos campos incluyen:
+  - Domains (Dominios): una lista de nombres de dominio completos (FQDN) autenticados por el certificado.
+  - Expires in (Vence en): número de días hasta el vencimiento del certificado.
+  - Public key info (Información de clave pública): el algoritmo criptográfico utilizado para generar el par de claves.
+  - Signature algorithm (Algoritmo de firma): el algoritmo criptográfico utilizado para crear la firma del certificado.
+  - Can be used with (Se puede utilizar con): una lista de los servicios integrados de ACM que admiten el tipo de certificado que está importando.
+- Si todo es correcto, seleccione Import (Importar).
 
 
-![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-2.png)
+![AWS certificate manager](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-1.png)
 
 
-![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-3.png)
+![AWS certificate manager](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-2.png)
 
 
-![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-4.png)
+![AWS certificate manager](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-3.png)
 
 
-![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-5.png)
+![AWS certificate manager](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-4.png)
 
 
-![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-6.png)
+![AWS certificate manager](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-5.png)
 
-# Grupos de seguridad
 
-![Grupo de seguridad](/assets/Nube-Publica/AWS/Grupos-Seguridad/grupo-objetivo.png)
+![AWS certificate manager](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-6.png)
 
-![Grupo de seguridad](/assets/Nube-Publica/AWS/Grupos-Seguridad/grupo-objetivo-1.png)
+# Grupos objetivos
 
-![Grupo de seguridad](/assets/Nube-Publica/AWS/Grupos-Seguridad/grupo-objetivo-2.png)
+Cree el grupo de destino que se va a utilizar para el direccionamiento de solicitudes. La regla del agente de escucha direcciona las solicitudes a los destinos registrados en este grupo de destino. El balanceador de carga comprueba el estado de los destinos del grupo utilizando las opciones de comprobación de estado definidas en el grupo de destino. 
+
+- Abra la consola de Amazon [EC2](https://console.aws.amazon.com/ec2/)
+- En el panel de navegación, en Equilibrio de carga, elige Grupos destinatarios.
+- Elija Create target group.
+- Mantenga el tipo de objetivo como instancias.
+- Para Nombre del grupo objetivo, introduzca un nombre para el nuevo grupo de destino.
+- Para Protocolo, elige HTTP, y para Puerto, elige 80. 
+
+![Grupos objetivos](/assets/Nube-Publica/AWS/Grupos-Seguridad/grupo-objetivo.png)
+
+- Para VPC, selecciona la VPC que contiene tus instancias. Protocolo HTTP1.
+- En Health checks (Comprobaciones de estado), mantenga la configuración predeterminada.
+- Elija Siguiente.
+
+![Grupos objetivos](/assets/Nube-Publica/AWS/Grupos-Seguridad/grupo-objetivo-1.png)
+
+- En la página Registrar destinos, siga estos pasos. Este es un paso opcional para crear el balanceador de cargas. Sin embargo, debe registrar este destino si desea probar su balanceador de carga y asegurarse de que dirige el tráfico a este destino.
+  - En el caso de Application, seleccione una o varias instancias.
+  - Conserve el puerto 80 predeterminado y seleccione Incluir como pendiente a continuación.
+- Elija Create target group.
+
+![Grupos objetivos](/assets/Nube-Publica/AWS/Grupos-Seguridad/grupo-objetivo-2.png)
 
 # Balanceador de Carga
 
-![Grupo de seguridad](/assets/Nube-Publica/AWS/Load-Balancer/balanceador-carga.png)
+Elastic Load Balancing admite diferentes tipos de balanceadores para esta guia se usara el Balanceadores de carga de aplicaciones.
 
-![Grupo de seguridad](/assets/Nube-Publica/AWS/Load-Balancer/balanceador-carga-1.png)
+- Abra la consola de Amazon [EC2](https://console.aws.amazon.com/ec2/)
+- En la barra de navegación, elija una región para el balanceador de carga. No olvide elegir la misma región que utilizó para las instancias EC2.
+- En el panel de navegación, en Load Balancing, elija Load Balancers.
+- Elija Create Load Balancer (Crear equilibrador de carga).
+- Para Application Load Balancer (Balanceador de carga de aplicaciones), elija Create (Crear).
 
-![Grupo de seguridad](/assets/Nube-Publica/AWS/Load-Balancer/balanceador-carga-2.png)
+![Balanceador de Carga](/assets/Nube-Publica/AWS/Load-Balancer/balanceador-carga.png)
 
-![Grupo de seguridad](/assets/Nube-Publica/AWS/Load-Balancer/balanceador-carga-3.png)
+- En Load Balancer name, escriba un nombre
+- Para Scheme y IP address type, mantenga los valores predeterminados.
+- Para el mapeo de red, seleccione la VPC que utilizó para las instancias EC2. Seleccione al menos dos zonas de disponibilidad y una subred por zona. En cada una de las zonas de disponibilidad que utilizó para lanzar las instancias EC2, seleccione la zona de disponibilidad y después seleccione una subred pública de esa zona de disponibilidad.
+- Para los grupos de seguridad, seleccionamos el grupo de seguridad predeterminado para la VPC que seleccionó en el paso anterior. En su lugar, puede elegir un grupo de seguridad diferente. El grupo de seguridad debe incluir reglas que permitan que el balanceador de carga se comunique con los destinos registrados tanto en el puerto del agente de escucha como en el puerto de comprobación de estado. 
+- Para los oyentes y el enrutamiento, mantenga el protocolo y el puerto predeterminados y seleccione su grupo objetivo de la lista. Esto configura un oyente que acepta el tráfico HTTP en el puerto 80 y reenvía el tráfico al grupo de destino seleccionado de forma predeterminada. En este tutorial, no va a crear un agente de escucha HTTPS.
+- Para la acción predeterminada, selecciona el grupo objetivo que creaste y registraste
+- (Opcional) Agregue una etiqueta para clasificar el equilibrador de carga. Las claves de las etiquetas deben ser únicas en cada balanceador de carga. Los caracteres permitidos son letras, espacios, números (en UTF-8) y los siguientes caracteres especiales: + - =. _ : / @. No utilice espacios iniciales ni finales. Los valores distinguen entre mayúsculas y minúsculas.
+- Revise la configuración y elija Create load balancer (Crear equilibrador de carga). Durante la creación, se aplican algunos atributos predeterminados al balanceador de cargas. Puede verlos y editarlos después de crear el balanceador de carga. Para obtener más información, consulte Atributos del balanceador de carga.
+
+![Balanceador de Carga](/assets/Nube-Publica/AWS/Load-Balancer/balanceador-carga-1.png)
+
+![Balanceador de Carga](/assets/Nube-Publica/AWS/Load-Balancer/balanceador-carga-2.png)
+
+![Balanceador de Carga](/assets/Nube-Publica/AWS/Load-Balancer/balanceador-carga-3.png)
 
 ## Agregamos el certificado creado
 
-![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-7.png)
+Abrimos el balanceador de carga y agregamos un nuevo listener para que redirija el trafico por el puerto 443 y además vinculamos con el certificado inportado anteriormente. 
 
-![NameCheap](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-8.png)
+![certificado](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-7.png)
+
+![certificado](/assets/Nube-Publica/AWS/Certificado-Dominio/Certificado-8.png)
 
 # Servidor WEB
 
@@ -831,48 +918,34 @@ show databases;
 SELECT User, Host, plugin FROM mysql.user;
 ~~~
 
-Enlace web para iniciar la instalación de PrestaShop en el navegador de internet para este proyecto es: `http://aws-prueba.duckdns.org`.
+## Iniciando la instalación de PrestaShop en el navegador
 
+Para iniciar la instalación de PrestaShop escribimos en la barra de busqueda  del navegador de internet el dominio por ejemplo: `http://aws-prueba.duckdns.org`.
 
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/Prestashop/instalacion-PrestaShop-1.png)
 
+Si se configuro el certifcado SSL del dominio, activamos la casilla SSL
+
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/Prestashop/instalacion-PrestaShop-2.png)
 
-![Grupo de seguridad](/assets/Nube-Publica/AWS/Prestashop/instalacion-PrestaShop-3.png)
+Ingresamos la información de RDS de la base de datos. Comprobamos que la información este correcta con el boton de prueba
 
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/Prestashop/instalacion-PrestaShop-4.png)
+
+Para ingresar a la area de administración de prestashop se requiere haber cambiado el nombre de la carpeta admin, ademas de eliminar la carpeta de instalación.
 
 ![Grupo de seguridad](/assets/Nube-Publica/AWS/Prestashop/instalacion-PrestaShop-5.png)
 
 
-## Finalizando la instalacación
+### Finalizando la instalacación
 
-Se recomienda eliminar la carpeta de instalación, aunque es más aconsejable cambiarle el nombre de la carpeta hasta que esté completamente seguro de que la instalación se ha realizado con éxito.
+Para finalizar la instalación y habilitar la area de administración de PrestaShop se requiere eliminar la carpeta de instalación, aunque es  aconsejable cambiarle el nombre de la carpeta hasta que esté completamente seguro de que la instalación se realizó con éxito. `sudo mv /var/www/tienda/install /var/www/tienda/backupinstall`
 
-~~~ bash
-sudo mv /var/www/tienda/install /var/www/tienda/backupinstall
-~~~
-
-O si queremos eliminar la carpeta
+Eliminamos la carpeta de instalación mediante la siguiente linea.
 
 ~~~ bash
 sudo rm -f /var/www/tienda/install
 ~~~
-
-En prestashop los usuarios se crean mediante perfiles de empleado, dentro del back-office de la tienda, los cuales van a tener permisos pre definidos sin embargo estos pueden ser modificados según la necesidades que el administrador lo requiera.
-
-![Datos en general](/assets/Nube-Publica/Prestashop/Team.png)
-
-![Datos en general](/assets/Nube-Publica/Prestashop/Prestashop-nuevo-empleado.png)
-
-Los permisos de de perfil son: 
-- SuperAdmin: Cuenta con todos los permisos sobre la tienda
-- Logistician: Solo puede acceder a ordenes, envios, a paginas de administración de inventario, y a partes de las paginas de catalogos y clientes.
-- translator: Solo tienen acceso a paginasde contenido para realizar la traducción del mismo, por ejemplo productos y categorias.
-- Salesman: Tiene los derechos del perfil de translator ademas puede acceder a las paginas de cliente, modulos y servicios web y algunos estados.
-
-![Datos en general](/assets/Nube-Publica/Prestashop/Modificar-permisos.png)
-
 
 ### Crear nuevos usuarios en Prestashop
 
@@ -945,18 +1018,7 @@ Si ha creado una plantilla de lanzamiento, puede crear un grupo de Auto Scaling 
 
 AWS WAFes un firewall de aplicaciones web que le permite supervisar las solicitudes HTTP (S) que se reenvían a los recursos de aplicaciones web protegidas. Puede proteger varios recursos entre ellos "Application Load Balancer"
 
-AWS WAFle permite controlar el acceso a su contenido. En función de los criterios que especifique, como las direcciones IP desde las que se originan las solicitudes o los valores de las cadenas de consulta, el servicio asociado al recurso protegido responde a las solicitudes con el contenido solicitado, con un código de estado HTTP 403 (prohibido) o con una respuesta personalizada. 
-
-En la ACL web, se crean reglas para definir los patrones de tráfico que se deben buscar en las solicitudes y especificar las acciones que se deben tomar en caso de que coincidan con las solicitudes. Las opciones de acción incluyen las siguientes:
-
-- Permita que las solicitudes vayan al recurso protegido para su procesamiento y respuesta.
-- Bloquee las solicitudes.
-- Cuente las solicitudes.
-- Realiza comprobaciones CAPTCHA o compáralas con las solicitudes para verificar el uso estándar del navegador por parte de los usuarios humanos.
-
-## Este tutorial muestra cómo utilizar AWS WAF de una manera básica
-
-### Configuración de AWS WAF.
+## Configuración de AWS WAF.
 
 Cree una lista de control de acceso web (ACL web) mediante el asistente de la consola de AWS WAF.
 
