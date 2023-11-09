@@ -17,7 +17,6 @@ Para llevar a cabo este despliegue, se empleará PrestaShop, una plataforma de c
 
 Entre otros requisitos para llevar a cabo este proyecto, se incluyen la necesidad de poseer un dominio y un certificado SSL para garantizar la seguridad de dicho dominio.
 
-
 # Linode
 
 [Crear cuenta con bono de 100$ por 3 meses](https://www.Linode.com/lp/affiliate-referral/?irclickid=yxT33iQ8OxyNW5iwfH3il1clUkAWcQUv63hqzs0&irgwc=1)
@@ -1370,7 +1369,14 @@ En reglas de salida se mantiene por defecto
 Con el procedimiento realizado para crear las replicas de la base de datos, creamos 2 clones de web1. 
 Las nuevas instancias se llamaran web2 y web3
 
-# Enlazar con el balanceador de carga
+## Enlazar con el balanceador de carga
 
-Abrimos el balanceador de carga creado y agregamos en la configuracion existente nuevos nodos que perteneceran a web1 y web2
+Abrimos el balanceador de carga creado y agregamos a la configuracion existente nuevos nodos que perteneceran a web1 y web2
 
+# ModSecurity3 para Nginx y Debian 11 con reglas de OWASP-CRS
+
+ModSecurity es una aplicación web gratuita y de código abierto que comenzó como un módulo de Apache y creció hasta convertirse en un firewall de aplicaciones web completo. Funciona inspeccionando las solicitudes enviadas al servidor web en tiempo real con un conjunto de reglas predefinidas, evitando ataques típicos a aplicaciones web como XSS e inyección SQL.
+
+El conjunto de reglas básicas (CRS) de ModSecurity de OWASP es un conjunto de reglas genéricas de detección de ataques para usar con ModSecurity o firewalls de aplicaciones web compatibles. El CRS tiene como objetivo proteger las aplicaciones web de una amplia gama de ataques, incluido el OWASP Top Ten, con un mínimo de alertas falsas. El CRS brinda protección contra muchas categorías de ataques comunes, incluidas la inyección SQL, secuencias de comandos entre sitios y la inclusión de archivos locales.
+
+Aunque originalmente era un módulo de Apache, ModSecurity también se puede instalar en Nginx como se detalla en esta [guía](https://johnyfelipe.github.io/nginx/Modsecurity-3.0-con-reglas-OWASP-Opcional/).
