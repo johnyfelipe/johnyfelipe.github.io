@@ -1,12 +1,12 @@
 ---
 title: "Implementación de un E-commerce de alta disponiblidad con Amazon AWS"
 categories:
-  - Cloud Computing
+  - Cloud-Computing
 tags:
-  - Nube pública
+  - Nube-pública
   - EC2
   - SSH
-  - Load Balancer
+  - Load-Balancer
   - Firewall
   - Security groups
   - VPC

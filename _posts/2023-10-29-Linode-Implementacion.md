@@ -1,12 +1,12 @@
 ---
 title: "Implementación de un E-commerce de alta disponiblidad con Linode"
 categories:
-  - Cloud Computing
+  - Cloud-Computing
 tags:
-  - Nube pública
+  - Nube-pública
   - Linode
   - SSH
-  - Node Balancer
+  - Node-Balancer
   - Firewall
   - VLAN
 ---
