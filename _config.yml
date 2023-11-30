@@ -105,7 +105,7 @@ analytics:
 # Site Author
 author:
   name             : "Johny Plaza"
-  avatar           : "https://scontent.fcue1-1.fna.fbcdn.net/v/t1.6435-9/116909258_10222835080935923_2919338190890102626_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=be3454&_nc_ohc=LpCdutdncvAAX-bAiTL&_nc_ht=scontent.fcue1-1.fna&oh=00_AfA04MWK_0LDp2Xxf_xUM2pxegIDJ2Ip8cAMhIM-3B8AoA&oe=65672170" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar           : "https://pbs.twimg.com/profile_images/1714294365546524672/Sh3wvhrW_400x400.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "Creando, probando, entendiendo y mejorando"
   location         : "Cuenca"
   email            : "jfelipe.plaza@gmail.com"
