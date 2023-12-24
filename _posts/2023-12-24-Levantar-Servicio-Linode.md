@@ -10,19 +10,28 @@ tags:
 
 ~~~ bash
 sudo hostnamectl set-hostname web1
+
 sudo nano /etc/hosts
-	127.0.1.1 web1
+~~~
+~~~ vim
+  127.0.1.1 web1
 ~~~
 
 ~~~bash
 sudo hostnamectl set-hostname web2
+
 sudo nano /etc/hosts
-	127.0.1.1 web2
+~~~
+~~~ vim
+  127.0.1.1 web2
 ~~~
 
 ~~~ bash
 sudo hostnamectl set-hostname web3
+
 sudo nano /etc/hosts
+~~~
+~~~ vim
   127.0.1.1 web3
 ~~~
 
@@ -42,7 +51,10 @@ mysql -u root -p -e "SHOW STATUS LIKE 'wsrep_cluster_size'"
 
 ~~~ bash
 sudo hostnamectl set-hostname bd1
+
 sudo nano /etc/hosts
+~~~
+~~~ vim
 	127.0.1.1 bd1
 ~~~
 
@@ -72,7 +84,11 @@ mysql -u root -p -e "SHOW STATUS LIKE 'wsrep_cluster_size'"
 
 ~~~ bash
 sudo hostnamectl set-hostname bd2
+
 sudo nano /etc/hosts
+~~~
+
+~~~ vim
 	127.0.1.1 bd2
 ~~~
 
@@ -96,7 +112,11 @@ mysql -u root -p -e "SHOW STATUS LIKE 'wsrep_cluster_size'"
 
 ~~~ bash
 sudo hostnamectl set-hostname bd3
+
 sudo nano /etc/hosts
+~~~
+
+~~~ vim
   127.0.1.1 bd3
 ~~~
 
