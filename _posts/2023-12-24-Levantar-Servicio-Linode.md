@@ -3,7 +3,7 @@ title: "Levantar el servicio WEB y de Base de datos"
 categories:
   - Terminal
 tags:
-  - SSH
+  - Linode
 ---
 
 # Servidores WEB
