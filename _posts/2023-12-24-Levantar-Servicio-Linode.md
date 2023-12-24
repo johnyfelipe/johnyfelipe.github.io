@@ -26,7 +26,7 @@ sudo nano /etc/hosts
   127.0.1.1 web3
 ~~~
 
-# Balanceador de carga
+## Balanceador de carga
 
 Agregar las nuevas IPs al node balancer
 
@@ -164,7 +164,7 @@ sudo galera_new_cluster
 sudo systemctl restart mariadb
 ~~~
 
-# HaProxy
+## HaProxy
 
 ~~~ bash
 ss -tunelp | grep 3306
